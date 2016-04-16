@@ -22,5 +22,9 @@ module Tictactoe
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    
+    config.x.minimum_handle_length = 3
+    config.x.maximum_handle_length = 30
+    config.x.maximum_email_address_length = 255
   end
 end

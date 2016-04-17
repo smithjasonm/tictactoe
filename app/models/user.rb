@@ -7,8 +7,11 @@ class User < ActiveRecord::Base
 
   minHandleLength = Rails.configuration.x.minimum_handle_length
   maxHandleLength = Rails.configuration.x.maximum_handle_length
+  validHandleFormat = Rails.configuration.x.valid_handle_format
   maxEmailLength = Rails.configuration.x.maximum_email_address_length
-  validates :handle, presence: true, length: { in: minHandleLength..maxHandleLength }
+  validEmailFormat = Rails.configuration.x.valid_email_format
+  validates :handle, presence: true, length: { in: minHandleLength..maxHandleLength },
+                     format: { with: validHandleFormat }
   validates :email, presence: true, length: { maximum: maxEmailLength },
-                    format: { with: /.+@.+\..+/i }
+                    format: { with: validEmailFormat }
 end

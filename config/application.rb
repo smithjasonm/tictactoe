@@ -24,7 +24,7 @@ module Tictactoe
     config.active_record.raise_in_transactional_callbacks = true
     
     config.x.minimum_handle_length = 3
-    config.x.maximum_handle_length = 30
+    config.x.maximum_handle_length = 15
     config.x.maximum_email_address_length = 255
     config.x.valid_handle_format = /\A[a-zA-Z0-9]\w+\z/
     config.x.valid_email_format = /.+@.+\..+/

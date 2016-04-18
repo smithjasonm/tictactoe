@@ -8,4 +8,4 @@ one:
 two:
   player1: two
   player2: one
-  status: 1
+  status: 0

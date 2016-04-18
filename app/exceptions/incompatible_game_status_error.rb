@@ -1,0 +1,2 @@
+class IncompatibleGameStatusError < StandardError
+end

@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+pending_game:
   player1: one
   player2: two
   status: 0
 
-two:
-  player1: two
-  player2: one
+new_game:
+  player1: one
+  player2: two
   status: 0

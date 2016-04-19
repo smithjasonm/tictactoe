@@ -1,14 +1,10 @@
 require 'test_helper'
 
 class GameTest < ActiveSupport::TestCase
-  test "should not save game without a status" do
+  test "should not save game with invalid status" do
     game = games(:pending_game)
     game.status = nil
     assert_not game.save
-  end
-  
-  test "should not save game with invalid status" do
-    game = games(:pending_game)
     game.status = -1
     assert_not game.save
     game.status = 6

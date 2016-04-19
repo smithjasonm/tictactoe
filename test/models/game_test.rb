@@ -1,6 +1,25 @@
 require 'test_helper'
 
 class GameTest < ActiveSupport::TestCase
+  test "should save game with valid configuration" do
+    game = Game.new({ player1: users(:one), player2: users(:two) })
+    assert game.save
+  end
+  
+  test "should delete all associated plays when game is deleted" do
+    game = games(:pending_game)
+    game_play_count = game.plays.size
+    assert game_play_count > 0
+    assert_difference "Play.count", -game_play_count do
+      game.destroy!
+    end
+  end
+  
+  test "new games should have initial status of PENDING" do
+    game = Game.new({ player1: users(:one), player2: users(:two) })
+    assert_equal Game::PENDING, game.status
+  end
+  
   test "should not save game with invalid status" do
     game = games(:pending_game)
     game.status = nil
@@ -8,6 +27,10 @@ class GameTest < ActiveSupport::TestCase
     game.status = -1
     assert_not game.save
     game.status = 6
+    assert_not game.save
+    game.status = 1.5
+    assert_not game.save
+    game.status = "a"
     assert_not game.save
   end
   

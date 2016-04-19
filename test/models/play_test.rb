@@ -12,6 +12,10 @@ class PlayTest < ActiveSupport::TestCase
     assert_not @play.save
     @play.x = 3
     assert_not @play.save
+    @play.x = 1.5
+    assert_not @play.save
+    @play.x = "a"
+    assert_not @play.save
   end
   
   test "should not save play with invalid y coordinate" do
@@ -21,12 +25,22 @@ class PlayTest < ActiveSupport::TestCase
     assert_not @play.save
     @play.y = 3
     assert_not @play.save
+    @play.y = 1.5
+    assert_not @play.save
+    @play.y = "a"
+    assert_not @play.save
   end
   
   test "should not save play with invalid player number" do
+    @play.player = nil
+    assert_not @play.save
     @play.player = 0
     assert_not @play.save
     @play.player = 3
+    assert_not @play.save
+    @play.player = 1.5
+    assert_not @play.save
+    @play.player = "a"
     assert_not @play.save
   end
   

@@ -150,6 +150,23 @@ class GameTest < ActiveSupport::TestCase
     end
   end
   
+  test "should allow user to resign from game user is playing" do
+    game = games(:new_game)
+    assert_equal Game::PENDING, game.status
+    game.resign(users(:one))
+    assert_equal Game::P1_FORFEIT, game.status
+  end
+  
+  test "should not allower user to resign from game user is not playing" do
+    game = games(:new_game)
+    user = users(:three)
+    assert_not_equal user, game.player1
+    assert_not_equal user, game.player2
+    assert_raise InvalidUserError do
+      game.resign(user)
+    end
+  end
+  
   private
   
     # Cause the given new game to be drawn

@@ -64,6 +64,17 @@ class Game < ActiveRecord::Base
     self
   end
   
+  # Register resignation (i.e., forfeit) by given user
+  def resign(user)
+    if user == player1
+      player1_forfeits
+    elsif user == player2
+      player2_forfeits
+    else
+      raise InvalidUserError, "User #{user.id} is not a player in this game"
+    end
+  end
+  
   private
     
     # Determine whether a proposed play is valid.

@@ -64,4 +64,51 @@ class UserTest < ActiveSupport::TestCase
   test "should save user with valid data" do
     assert @new_user.save
   end
+  
+  test "user should be able to create a new game" do
+    user = users(:one)
+    assert_difference "user.created_games.size", 1 do
+      user.create_game
+    end
+  end
+  
+  test "user should be able to join an existing game" do
+    user = users(:two)
+    assert_difference "user.joined_games.size", 1 do
+      user.join_game games(:waiting_game)
+    end
+  end
+  
+  test "user should not be able to join a game user created" do
+    user = users(:one)
+    game = games(:waiting_game)
+    assert_equal user, game.player1
+    assert_raise InvalidUserError do
+      user.join_game(game)
+    end
+  end
+  
+  test "user should be able to resign from a game user created" do
+    user = users(:one)
+    game = games(:pending_game)
+    assert_equal Game::PENDING, game.status
+    user.resign_from_game(game)
+    assert_equal Game::P1_FORFEIT, game.status
+  end
+  
+  test "user should be able to resign from a game user joined" do
+    user = users(:two)
+    game = games(:pending_game)
+    assert_equal Game::PENDING, game.status
+    user.resign_from_game(game)
+    assert_equal Game::P2_FORFEIT, game.status
+  end
+  
+  test "user should be able to retrieve user's game record" do
+    user = users(:one)
+    assert user.game_record.is_a? Hash
+    assert user.game_record.has_key?(:wins)
+    assert user.game_record.has_key?(:losses)
+    assert user.game_record.has_key?(:draws)
+  end
 end

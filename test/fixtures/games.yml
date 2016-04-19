@@ -9,3 +9,7 @@ new_game:
   player1: one
   player2: two
   status: 0
+
+waiting_game:
+  player1: one
+  status: 0

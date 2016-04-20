@@ -83,7 +83,17 @@ class UserTest < ActiveSupport::TestCase
     user = users(:one)
     game = games(:waiting_game)
     assert_equal user, game.player1
-    assert_raise InvalidUserError do
+    assert_raise JoiningUserCreatedGameError do
+      user.join_game(game)
+    end
+  end
+  
+  test "user should not be able to join a game already joined by different user" do
+    user = users(:three)
+    game = games(:pending_game)
+    assert_not_nil game.player2
+    assert_not_equal user, game.player2
+    assert_raise GameAlreadyJoinedError do
       user.join_game(game)
     end
   end

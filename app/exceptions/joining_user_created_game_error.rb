@@ -1,0 +1,2 @@
+class JoiningUserCreatedGameError < StandardError
+end

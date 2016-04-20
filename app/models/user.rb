@@ -22,11 +22,10 @@ class User < ActiveRecord::Base
   
   # Join an existing game.
   def join_game(game)
-    if self != game.player1
-      joined_games << game
-    else
-      raise InvalidUserError, "User cannot join game user created"
-    end
+    raise JoiningUserCreatedGameError if self == game.player1
+    raise GameAlreadyJoinedError unless game.player2.nil? || self == game.player2
+    
+    joined_games << game
   end
   
   # Resign from a pending game.

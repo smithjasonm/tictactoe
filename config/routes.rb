@@ -7,8 +7,9 @@ Rails.application.routes.draw do
 
   get 'sessions/new'
 
-  resources :plays
-  resources :games
+  resources :games, only: [:index, :show, :create, :update, :destroy] do
+    resources :plays, only: [:index, :create], format: 'json'
+  end
   resources :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

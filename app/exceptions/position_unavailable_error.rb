@@ -1,0 +1,2 @@
+class PositionUnavailableError < StandardError
+end

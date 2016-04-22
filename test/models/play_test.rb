@@ -2,7 +2,11 @@ require 'test_helper'
 
 class PlayTest < ActiveSupport::TestCase
   setup do
-    @play = plays(:pending_game_play_1)
+    @play = Play.new({ game: games(:new_game), number: 1, x: 1, y: 1 })
+  end
+  
+  test "should save valid play" do
+    assert @play.save
   end
   
   test "should not save play with invalid x coordinate" do
@@ -31,21 +35,32 @@ class PlayTest < ActiveSupport::TestCase
     assert_not @play.save
   end
   
-  test "should not save play with invalid player number" do
-    @play.player = nil
+  test "should not save play with invalid number" do
+    @play.number = nil
     assert_not @play.save
-    @play.player = 0
+    @play.number = 0
     assert_not @play.save
-    @play.player = 3
+    @play.number = 10
     assert_not @play.save
-    @play.player = 1.5
+    @play.number = 1.5
     assert_not @play.save
-    @play.player = "a"
+    @play.number = "a"
     assert_not @play.save
   end
   
   test "should not save play without an associated game" do
     @play.game = nil
     assert_not @play.save
+  end
+  
+  test "player should be consistent with play number" do
+    @play.number = 1
+    assert @play.player == 1
+    @play.number = 2
+    assert @play.player == 2
+    @play.number = 3
+    assert @play.player == 1
+    @play.number = 4
+    assert @play.player == 2
   end
 end

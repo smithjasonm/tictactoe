@@ -13,3 +13,8 @@ new_game:
 waiting_game:
   player1: one
   status: 0
+
+forfeited_game:
+  player1: one
+  player2: two
+  status: 4

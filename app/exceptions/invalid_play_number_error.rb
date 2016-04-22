@@ -1,0 +1,2 @@
+class InvalidPlayNumberError < StandardError
+end

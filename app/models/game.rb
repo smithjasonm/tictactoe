@@ -7,7 +7,7 @@ class Game < ActiveRecord::Base
   P1_FORFEIT = 4
   P2_FORFEIT = 5
   
-  has_many :plays, lambda { order "created_at ASC" }, inverse_of: :game,
+  has_many :plays, lambda { order "number ASC" }, inverse_of: :game,
                    dependent: :delete_all
   belongs_to :player1, class_name: "User", foreign_key: "player1_id",
                        inverse_of: :created_games
@@ -27,44 +27,64 @@ class Game < ActiveRecord::Base
     plays.each { |play| @state[play.x][play.y] = play.player }
   end
   
-  # Make a play.
-  def play(player, x, y)
-    unless status == PENDING
-      raise IncompatibleGameStatusError, "Status must be PENDING; status is #{status}"
+  # Determine whether given position is available.
+  def position_available?(x, y)
+    @state[x][y].nil?
+  end
+  
+  # Make a play. Saves play and self automatically. Returns the new play.
+  def make_play(number, x, y)
+    play = nil
+    with_lock do
+      unless status == PENDING
+        raise IncompatibleGameStatusError, "Status must be PENDING; status is #{status}"
+      end
+      unless number == plays.length + 1
+        raise InvalidPlayNumberError
+      end
+      unless position_available?(x, y)
+        raise PositionUnavailableError
+      end
+      
+      play = plays.create! number: number, x: x, y: y
+      @state[x][y] = play.player
+      update_status
+      save!
     end
-    unless is_valid_play?(player, x, y)
-      raise InvalidPlayError
-    end
-    
-    plays.create! player: player, x: x, y: y
-    @state[x][y] = player
-    update_status
-    self
+    return play
   end
   
   # Register forfeit by player 1.
+  # TODO: Refactor
   def player1_forfeits
-    unless status == PENDING || status == P1_FORFEIT
-      raise IncompatibleGameStatusError,
-            "Status must be PENDING or P1_FORFEIT; status is #{status}"
+    with_lock do
+      unless status == PENDING || status == P1_FORFEIT
+        raise IncompatibleGameStatusError,
+              "Status must be PENDING or P1_FORFEIT; status is #{status}"
+      end
+      
+      self.status = P1_FORFEIT
+      save!
     end
-    
-    self.status = P1_FORFEIT
     self
   end
   
   # Register forfeit by player 2.
+  # TODO: Refactor
   def player2_forfeits
-    unless status == PENDING || status == P2_FORFEIT
-      raise IncompatibleGameStatusError,
-            "Status must be PENDING or P2_FORFEIT; status is #{status}"
+    with_lock do
+      unless status == PENDING || status == P2_FORFEIT
+        raise IncompatibleGameStatusError,
+              "Status must be PENDING or P2_FORFEIT; status is #{status}"
+      end
+      
+      self.status = P2_FORFEIT
+      save!
     end
-    
-    self.status = P2_FORFEIT
     self
   end
   
-  # Register resignation (i.e., forfeit) by given user
+  # Register resignation (i.e., forfeit) by given user.
   def resign(user)
     if user == player1
       player1_forfeits
@@ -77,16 +97,9 @@ class Game < ActiveRecord::Base
   
   private
     
-    # Determine whether a proposed play is valid.
-    # A play is valid if it is the given player's turn and the chosen space has not
-    # not already been filled.
-    def is_valid_play?(player, x, y)
-      player == plays.size % 2 + 1 && @state[x][y].nil?
-    end
-    
     # Update pending-game status based on plays made so far.
     def update_status
-      if plays.size > 2
+      if status == PENDING && plays.length > 2
         result = false
         3.times do |n|
           result = check_row(n)
@@ -97,7 +110,7 @@ class Game < ActiveRecord::Base
         result = check_diagonal_right_left if result == false
         if result != false
           self.status = result == 1 ? P1_WON : P2_WON
-        elsif plays.size == 9
+        elsif plays.length == 9
           self.status = DRAW
         end
       end

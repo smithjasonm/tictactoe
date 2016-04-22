@@ -1,74 +1,28 @@
 class PlaysController < ApplicationController
-  before_action :set_play, only: [:show, :edit, :update, :destroy]
-
-  # GET /plays
-  # GET /plays.json
+  # GET /games/1/plays.json
   def index
-    @plays = Play.all
+    @plays = Game.find(params[:game_id]).plays
   end
 
-  # GET /plays/1
-  # GET /plays/1.json
-  def show
-  end
-
-  # GET /plays/new
-  def new
-    @play = Play.new
-  end
-
-  # GET /plays/1/edit
-  def edit
-  end
-
-  # POST /plays
-  # POST /plays.json
+  # POST /games/1/plays.json
   def create
-    @play = Play.new(play_params)
-
-    respond_to do |format|
-      if @play.save
-        format.html { redirect_to @play, notice: 'Play was successfully created.' }
-        format.json { render :show, status: :created, location: @play }
-      else
-        format.html { render :new }
-        format.json { render json: @play.errors, status: :unprocessable_entity }
-      end
+    game = Game.find(params[:game_id])
+    p = Play.new(play_params)
+    begin
+      @play = game.make_play(p.number, p.x, p.y)
+    rescue IncompatibleGameStatusError, InvalidPlayNumberError,
+                                        PositionUnavailableError => e
+      render json: e.message, status: :unprocessable_entity
+    rescue ActiveRecord::RecordInvalid => invalid
+      render json: invalid.record.errors, status: :unprocessable_entity
     end
-  end
-
-  # PATCH/PUT /plays/1
-  # PATCH/PUT /plays/1.json
-  def update
-    respond_to do |format|
-      if @play.update(play_params)
-        format.html { redirect_to @play, notice: 'Play was successfully updated.' }
-        format.json { render :show, status: :ok, location: @play }
-      else
-        format.html { render :edit }
-        format.json { render json: @play.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /plays/1
-  # DELETE /plays/1.json
-  def destroy
-    @play.destroy
-    respond_to do |format|
-      format.html { redirect_to plays_url, notice: 'Play was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    render :show, status: :created
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_play
-      @play = Play.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
+  
+    # Whitelist parameters.
     def play_params
-      params.require(:play).permit(:game_id, :player, :x, :y)
+      params.require(:play).permit(:number, :x, :y)
     end
 end

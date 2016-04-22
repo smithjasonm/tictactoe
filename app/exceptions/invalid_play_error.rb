@@ -1,2 +1,0 @@
-class InvalidPlayError < StandardError
-end

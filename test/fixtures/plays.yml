@@ -2,12 +2,12 @@
 
 pending_game_play_1:
   game: pending_game
-  player: 1
+  number: 1
   x: 1
   'y': 1
 
 pending_game_play_2:
   game: pending_game
-  player: 2
+  number: 2
   x: 0
   'y': 0

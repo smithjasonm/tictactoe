@@ -36,9 +36,21 @@ class GameTest < ActiveSupport::TestCase
   
   test "should not accept two plays in one position" do
     game = games(:new_game)
-    game.play(1, 1, 1)
-    assert_raise InvalidPlayError do
-      game.play(2, 1, 1)
+    game.make_play(1, 1, 1)
+    assert_raise PositionUnavailableError do
+      game.make_play(2, 1, 1)
+    end
+  end
+  
+  test "should not acccept play with invalid number" do
+    game = games(:new_game)
+    game.make_play(1, 1, 1)
+    assert_raise InvalidPlayNumberError do
+      game.make_play(1, 0, 0)
+    end
+    game.reload
+    assert_raise InvalidPlayNumberError do
+      game.make_play(3, 0, 0)
     end
   end
   
@@ -63,7 +75,7 @@ class GameTest < ActiveSupport::TestCase
     assert_equal Game::DRAW, game.status
   end
   
-  test "should set status to P1_FORFEIT if player 1 foreits" do
+  test "should set status to P1_FORFEIT if player 1 forfeits" do
     game = games(:pending_game)
     assert_equal Game::PENDING, game.status
     game.player1_forfeits
@@ -81,7 +93,7 @@ class GameTest < ActiveSupport::TestCase
     game = games(:new_game)
     game.player1_forfeits
     assert_raise IncompatibleGameStatusError do
-      game.play(1, 1, 1)
+      game.make_play(1, 1, 1)
     end
   end
   
@@ -89,7 +101,7 @@ class GameTest < ActiveSupport::TestCase
     game = games(:new_game)
     game.player2_forfeits
     assert_raise IncompatibleGameStatusError do
-      game.play(1, 1, 1)
+      game.make_play(1, 1, 1)
     end
   end
   
@@ -97,7 +109,7 @@ class GameTest < ActiveSupport::TestCase
     game = games(:new_game)
     draw_game game
     assert_raise IncompatibleGameStatusError do
-      game.play(1, 1, 1)
+      game.make_play(1, 1, 1)
     end
   end
   
@@ -171,36 +183,36 @@ class GameTest < ActiveSupport::TestCase
   
     # Cause the given new game to be drawn
     def draw_game(game)
-      game.play(1, 1, 1)
-      game.play(2, 0, 0)
-      game.play(1, 2, 0)
-      game.play(2, 0, 2)
-      game.play(1, 0, 1)
-      game.play(2, 2, 1)
-      game.play(1, 1, 0)
-      game.play(2, 1, 2)
-      game.play(1, 2, 2)
+      game.make_play(1, 1, 1)
+      game.make_play(2, 0, 0)
+      game.make_play(3, 2, 0)
+      game.make_play(4, 0, 2)
+      game.make_play(5, 0, 1)
+      game.make_play(6, 2, 1)
+      game.make_play(7, 1, 0)
+      game.make_play(8, 1, 2)
+      game.make_play(9, 2, 2)
       game
     end
     
     # Make player 1 win the given new game
     def make_player1_win(game)
-      game.play(1, 0, 0)
-      game.play(2, 1, 0)
-      game.play(1, 0, 1)
-      game.play(2, 2, 0)
-      game.play(1, 0, 2)
+      game.make_play(1, 0, 0)
+      game.make_play(2, 1, 0)
+      game.make_play(3, 0, 1)
+      game.make_play(4, 2, 0)
+      game.make_play(5, 0, 2)
       game
     end
     
     # Make player 2 win the given new game
     def make_player2_win(game)
-      game.play(1, 0, 0)
-      game.play(2, 2, 0)
-      game.play(1, 0, 1)
-      game.play(2, 0, 2)
-      game.play(1, 2, 2)
-      game.play(2, 1, 1)
+      game.make_play(1, 0, 0)
+      game.make_play(2, 2, 0)
+      game.make_play(3, 0, 1)
+      game.make_play(4, 0, 2)
+      game.make_play(5, 2, 2)
+      game.make_play(6, 1, 1)
       game
     end
 end

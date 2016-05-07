@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update, :destroy]
+  before_action :set_game, only: [:show, :edit, :update, :destroy, :quit]
 
   # GET /games
   # GET /games.json
@@ -62,6 +62,17 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+  
+  # POST /games/1/quit
+  # POST /games/1/quit.json
+  def quit
+    raise "current_user must first be implemented"
+    @game.resign current_user
+    respond_to do |format|
+      format.html { redirect_to @game, notice: 'Game was successfully quit.' }
+      format.json { render :show, status: :ok, location: @game }
     end
   end
 

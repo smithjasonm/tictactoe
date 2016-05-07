@@ -11,8 +11,8 @@ $(document).on "ready page:load", ->
     $("#play_y").val position.y
     $("#new_play").submit()
   
-  # When play has been created on server, update game view
-  $("#new_play").on "ajax:success", (e, data, status, xhr) ->
+  # Update game view when play is made or game is quit
+  $("#new_play, .quit_game").on "ajax:success", (e, data, status, xhr) ->
     Turbolinks.visit location
     
     ###
@@ -23,6 +23,6 @@ $(document).on "ready page:load", ->
     $cell.text = if data.player === 1 then 'x' else 'o'
     ###
   
-  # Handle errors creating play
-  $("#new_play").on "ajax:error", (e, data, status, xhr) ->
+  # Handle errors creating play or quitting game
+  $("#new_play, .quit_game").on "ajax:error", (e, data, status, xhr) ->
     console.log data

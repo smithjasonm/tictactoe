@@ -23,6 +23,11 @@
     <%= f.hidden_field :x %>
     <%= f.hidden_field :y %>
   <% end %>
+  
+  <%= form_for @game, url: { action: 'quit' }, method: 'post', remote: true,
+                      html: { class: 'quit_game', id: "quit_game_#{@game.id}" } do |f| %>
+    <%= f.submit 'Resign' %>
+  <% end %>
 <% end %>
 
 <%= link_to 'Edit', edit_game_path(@game) %> |

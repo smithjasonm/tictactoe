@@ -34,6 +34,12 @@ class GameTest < ActiveSupport::TestCase
     assert_not game.save
   end
   
+  test "should accept and save valid play" do
+    game = games(:new_game)
+    play = game.make_play(1, 1, 1)
+    assert play.persisted?
+  end
+  
   test "should not accept two plays in one position" do
     game = games(:new_game)
     game.make_play(1, 1, 1)
@@ -51,6 +57,28 @@ class GameTest < ActiveSupport::TestCase
     game.reload
     assert_raise InvalidPlayNumberError do
       game.make_play(3, 0, 0)
+    end
+  end
+  
+  test "should not accept play with invalid position" do
+    game = games(:new_game)
+    assert_raise InvalidPlayPositionError do
+      game.make_play(1, 0, 3)
+    end
+    assert_raise InvalidPlayPositionError do
+      game.make_play(1, 3, 0)
+    end
+    assert_raise InvalidPlayPositionError do
+      game.make_play(1, 0, -1)
+    end
+    assert_raise InvalidPlayPositionError do
+      game.make_play(1, -1, 0)
+    end
+    assert_raise InvalidPlayPositionError do
+      game.make_play(1, 0, 0.5)
+    end
+    assert_raise InvalidPlayPositionError do
+      game.make_play(1, 0.5, 0)
     end
   end
   

@@ -27,8 +27,19 @@ class Game < ActiveRecord::Base
     plays.each { |play| @state[play.x][play.y] = play.player }
   end
   
+  # Determine whether a given position is valid.
+  def position_valid?(x, y)
+    [x, y].each do |a|
+      return false unless a.is_a?(Integer) && a >= 0 && a <= 2
+    end
+    return true
+  end
+  
   # Determine whether given position is available.
   def position_available?(x, y)
+    unless position_valid?(x, y)
+      raise InvalidPlayPositionError
+    end
     @state[x][y].nil?
   end
   

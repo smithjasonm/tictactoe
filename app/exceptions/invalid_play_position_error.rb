@@ -1,0 +1,2 @@
+class InvalidPlayPositionError < StandardError
+end

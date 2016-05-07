@@ -15,5 +15,15 @@
   <%= @game.status %>
 </p>
 
+<%= render @game %>
+
+<% if @game.status == Game::PENDING %>
+  <%= form_for @next_play, url: [@game, @next_play], remote: true do |f| %>
+    <%= f.hidden_field :number %>
+    <%= f.hidden_field :x %>
+    <%= f.hidden_field :y %>
+  <% end %>
+<% end %>
+
 <%= link_to 'Edit', edit_game_path(@game) %> |
 <%= link_to 'Back', games_path %>

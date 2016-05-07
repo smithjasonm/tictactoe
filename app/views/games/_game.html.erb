@@ -1,0 +1,16 @@
+<%= content_tag :table, class: 'game', data: { status: game.status } do %>
+  <% 3.times do |row| -%>
+    <tr>
+      <% 3.times do |col| -%>
+        <% position_state = game.position_state(col, row) -%>
+        <% cell_class = "position #{ position_state.nil? ? 'empty' : 'filled' }" -%>
+        <% cell_data = { x: col, y: row} -%>
+        <%= content_tag :td, class: cell_class, data: cell_data do %>
+          <% if position_state -%>
+            <%= position_state == 1 ? 'X' : 'O' %>
+          <% end -%>
+        <% end %>
+      <% end -%>
+    </tr>
+  <% end -%>
+<% end %>

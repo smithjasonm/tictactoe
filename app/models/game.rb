@@ -27,6 +27,12 @@ class Game < ActiveRecord::Base
     plays.each { |play| @state[play.x][play.y] = play.player }
   end
   
+  # Return next valid play number, or -1 if game is not pending
+  def next_play_number
+    return -1 unless status == PENDING
+    return plays.length + 1
+  end
+  
   # Determine whether a given position is valid.
   def position_valid?(x, y)
     [x, y].each do |a|
@@ -41,6 +47,13 @@ class Game < ActiveRecord::Base
       raise InvalidPlayPositionError
     end
     @state[x][y].nil?
+  end
+  
+  def position_state(x, y)
+    unless position_valid?(x, y)
+      raise InvalidPlayPositionError
+    end
+    @state[x][y]
   end
   
   # Make a play. Saves play and self automatically. Returns the new play.

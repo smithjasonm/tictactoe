@@ -10,6 +10,10 @@ class GamesController < ApplicationController
   # GET /games/1
   # GET /games/1.json
   def show
+    if @game.status == Game::PENDING
+      @next_play = Play.new
+      @next_play.number = @game.next_play_number
+    end
   end
 
   # GET /games/new

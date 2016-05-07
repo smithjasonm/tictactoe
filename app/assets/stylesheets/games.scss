@@ -1,3 +1,20 @@
 // Place all the styles related to the games controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.game {
+  border-collapse: collapse;
+  td {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    color: blue;
+    font-size: 75px;
+  }
+  td:not(:last-child) {
+    border-right: 2px solid green;
+  }
+  tr:not(:last-child) {
+    border-bottom: 2px solid green;
+  }
+}

@@ -10,13 +10,13 @@ class PlaysController < ApplicationController
     p = Play.new(play_params)
     begin
       @play = game.make_play(p.number, p.x, p.y)
+      render :show, status: :created, location: game
     rescue IncompatibleGameStatusError, InvalidPlayNumberError,
                                         PositionUnavailableError => e
       render json: e.message, status: :unprocessable_entity
     rescue ActiveRecord::RecordInvalid => invalid
       render json: invalid.record.errors, status: :unprocessable_entity
     end
-    render :show, status: :created
   end
 
   private

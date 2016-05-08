@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<p id="notice" class="alert alert-info" role="alert"><%= notice %></p>
 
 <h1>Listing Games</h1>
 
@@ -15,8 +15,8 @@
   <tbody>
     <% @games.each do |game| %>
       <tr>
-        <td><%= game.player1 %></td>
-        <td><%= game.player2 %></td>
+        <td><%= game.player1_id %></td>
+        <td><%= game.player2_id %></td>
         <td><%= game.status %></td>
         <td><%= link_to 'Show', game %></td>
         <td><%= link_to 'Edit', edit_game_path(game) %></td>

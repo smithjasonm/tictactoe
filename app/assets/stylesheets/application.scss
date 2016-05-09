@@ -15,3 +15,8 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "**/*";
+
+// Helper to prevent undesirable wrapping
+.nowrap {
+  white-space: nowrap;
+}

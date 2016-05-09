@@ -7,7 +7,7 @@
     <%= gravatar_image_tag(@user, :profile) %>
   </div>
   <div class="col-sm-6">
-    <h2><%= @user.handle %></h2>
+    <h2 class="text-center"><%= @user.handle %></h2>
     <% unless current_user == @user -%>
       <%= render partial: 'pair_record', object: @user.game_record(current_user) %>
     <% end -%>

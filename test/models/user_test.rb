@@ -39,6 +39,20 @@ class UserTest < ActiveSupport::TestCase
     assert_not @new_user.save
   end
   
+  test "handle should be unique (without regard to case)" do
+    @new_user.handle = "user1"
+    assert @new_user.invalid?
+  end
+  
+  test "handle should be trimmed before saving" do
+    @new_user.handle = "  handle"
+    @new_user.save!
+    assert_equal "handle", @new_user.handle
+    @new_user.handle = "handle2  "
+    @new_user.save!
+    assert_equal "handle2", @new_user.handle
+  end
+  
   test "should not save user without email address" do
     @new_user.email = ""
     assert_not @new_user.save
@@ -59,6 +73,20 @@ class UserTest < ActiveSupport::TestCase
     @new_user.email = "a" * (Rails.configuration.x.maximum_email_address_length - 11) +
                       "@example.com"
     assert_not @new_user.save
+  end
+  
+  test "email should be unique (without regard to case)" do
+    @new_user.email = "User1@example.com"
+    assert @new_user.invalid?
+  end
+  
+  test "email should be trimmed before saving" do
+    @new_user.email = "  email@example.com"
+    @new_user.save!
+    assert_equal "email@example.com", @new_user.email
+    @new_user.email = "email2@example.com  "
+    @new_user.save!
+    assert_equal "email2@example.com", @new_user.email
   end
   
   test "should save user with valid data" do

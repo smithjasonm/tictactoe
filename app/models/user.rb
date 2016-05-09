@@ -11,9 +11,14 @@ class User < ActiveRecord::Base
   maxEmailLength = Rails.configuration.x.maximum_email_address_length
   validEmailFormat = Rails.configuration.x.valid_email_format
   validates :handle, presence: true, length: { in: minHandleLength..maxHandleLength },
-                     format: { with: validHandleFormat }
+                     format: { with: validHandleFormat },
+                     uniqueness: { case_sensitive: false }
   validates :email, presence: true, length: { maximum: maxEmailLength },
-                    format: { with: validEmailFormat }
+                    format: { with: validEmailFormat },
+                    uniqueness: { case_sensitive: false }
+  
+  # Trim whitespace from relevant user input before validation
+  before_validation :trim_whitespace
 
   # Create a new game.
   def create_game
@@ -89,5 +94,11 @@ class User < ActiveRecord::Base
           record[:games_joined] += 1
         end
       end
+    end
+    
+    # Trim whitespace from relevant user input
+    def trim_whitespace
+      self.handle = handle.try(:strip)
+      self.email = email.try(:strip)
     end
 end

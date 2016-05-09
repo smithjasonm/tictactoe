@@ -29,6 +29,6 @@ module UsersHelper
     
     # Get hash of given email address for use in Gravatar URL.
     def email_hash(email)
-      Digest::MD5.digest email.strip.downcase
+      Digest::MD5.hexdigest email.downcase
     end
 end

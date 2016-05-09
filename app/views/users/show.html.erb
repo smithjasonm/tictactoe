@@ -1,14 +1,19 @@
-<p id="notice"><%= notice %></p>
+<% if notice -%>
+  <p id="notice" class="alert alert-info" role="alert"><%= notice %></p>
+<% end -%>
 
-<p>
-  <strong>Handle:</strong>
-  <%= @user.handle %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
+<div class="row">
+  <div class="col-sm-6">
+    <%= gravatar_image_tag(@user, :profile) %>
+  </div>
+  <div class="col-sm-6">
+    <h2><%= @user.handle %></h2>
+    <% unless current_user == @user -%>
+      <%= render partial: 'pair_record', object: @user.game_record(current_user) %>
+    <% end -%>
+    <%= render partial: 'full_record', object: @user.game_record %>
+  </div>
+</div>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

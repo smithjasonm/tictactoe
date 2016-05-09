@@ -1,3 +1,7 @@
+<% content_for :title do -%>
+  <%= @user.handle %>
+<% end -%>
+
 <% if notice -%>
   <p id="notice" class="alert alert-info" role="alert"><%= notice %></p>
 <% end -%>

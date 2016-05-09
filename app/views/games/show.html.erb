@@ -1,3 +1,7 @@
+<% content_for :title do -%>
+  <%= "#{ @game.player1.handle } vs. #{ @game.player2.handle }" %>
+<% end -%>
+
 <% if notice -%>
   <p id="notice" class="alert alert-info" role="alert"><%= notice %></p>
 <% end -%>

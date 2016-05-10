@@ -11,23 +11,30 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :handle %><br>
-    <%= f.text_field :handle %>
+  <div class="form-group">
+    <%= f.label :handle, class: 'control-label' do %>
+      Nickname
+      <span class="glyphicon glyphicon-question-sign" aria-hidden="true"
+            data-toggle="tooltip" data-placement="auto right"
+            title="<%= Rails.configuration.x.minimum_handle_length %>–<%= Rails.configuration.x.maximum_handle_length %>
+                   alphanumeric characters">
+      </span>
+    <% end %>
+    <%= f.text_field :handle, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
+  <div class="form-group">
+    <%= f.label :email, class: 'control-label' %>
+    <%= f.email_field :email, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label :password %><br>
-    <%= f.password_field :password %>
+  <div class="form-group">
+    <%= f.label :password, class: 'control-label' %>
+    <%= f.password_field :password, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label :password_confirmation %><br>
-    <%= f.password_field :password_confirmation %>
+  <div class="form-group">
+    <%= f.label :password_confirmation, class: 'control-label' %>
+    <%= f.password_field :password_confirmation, class: 'form-control' %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-group">
+    <%= f.submit 'Register', class: 'btn btn-default' %>
   </div>
 <% end %>

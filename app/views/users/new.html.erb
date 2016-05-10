@@ -1,5 +1,9 @@
-<h1>New User</h1>
+<h1 class="cover-heading">Create Account</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', users_path %>
+<div class="new-user-content">
+  <%= render 'form' %>
+  
+  <p class="existing-account-instruction">
+    Have an account? <%= link_to 'Log in', '#' %>
+  </p>
+</div>

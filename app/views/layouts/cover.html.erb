@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html id="home-page"> <!-- Note: ID is referenced in script at end of body. -->
+  <head>
+    <title>Tic-Tac-Toe</title>
+    <%= render 'layouts/head' %>
+  </head>
+  <body data-no-turbolink>
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Tic-Tac-Toe</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <%= nav_link 'Home', root_path %>
+                  <%= nav_link 'Features', '#' %>
+                  <%= nav_link 'Contact', '#' %>
+                  <%= nav_link 'Login', '#' %>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <%= yield %>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>© <%= Date.today.year %> JMS</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    
+    <script>
+      // Must reset document ID, as Turbolinks will not update it.
+      document.documentElement.id = "home-page";
+    </script>
+  </body>
+</html>

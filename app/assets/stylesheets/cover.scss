@@ -121,8 +121,18 @@
     padding: 10px 20px;
     font-weight: bold;
   }
+  .home-content {
+    .existing-account-instruction {
+      margin: -10px;
+    }
+  }
+  .new-user-content {
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
   .existing-account-instruction {
-    margin: -10px;
     color: #aaa;
     a,
     a:focus,

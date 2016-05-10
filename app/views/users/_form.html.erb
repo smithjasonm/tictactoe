@@ -1,40 +1,16 @@
-<%= form_for(@user) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="form-group">
-    <%= f.label :handle, class: 'control-label' do %>
+<%= bootstrap_form_for(@user) do |f| %>
+  <%= f.text_field :handle, label: <<-LABEL.html_safe
       Nickname
       <span class="glyphicon glyphicon-question-sign" aria-hidden="true"
             data-toggle="tooltip" data-placement="auto right"
-            title="<%= Rails.configuration.x.minimum_handle_length %>–<%= Rails.configuration.x.maximum_handle_length %>
-                   alphanumeric characters">
+            title="#{ Rails.configuration.x.minimum_handle_length }–#{ Rails.configuration.x.maximum_handle_length } alphanumeric characters">
       </span>
-    <% end %>
-    <%= f.text_field :handle, class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= f.label :email, class: 'control-label' %>
-    <%= f.email_field :email, class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= f.label :password, class: 'control-label' %>
-    <%= f.password_field :password, class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= f.label :password_confirmation, class: 'control-label' %>
-    <%= f.password_field :password_confirmation, class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= f.submit 'Register', class: 'btn btn-default' %>
-  </div>
+      LABEL
+  %>
+  <%= f.email_field :email %>
+  <%= f.password_field :password %>
+  <%= f.password_field :password_confirmation %>
+  <%= f.form_group do %>
+    <%= f.submit 'Register' %>
+  <% end %>
 <% end %>

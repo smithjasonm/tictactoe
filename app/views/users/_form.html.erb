@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(@user) do |f| %>
+<%= bootstrap_form_for(@user, inline_errors: false) do |f| %>
   <%= f.text_field :handle, label: <<-LABEL.html_safe
       Nickname
       <span class="glyphicon glyphicon-question-sign" aria-hidden="true"
@@ -11,6 +11,6 @@
   <%= f.password_field :password %>
   <%= f.password_field :password_confirmation %>
   <%= f.form_group do %>
-    <%= f.submit 'Register' %>
+    <%= f.submit @user.new_record? ? 'Register' : 'Submit' %>
   <% end %>
 <% end %>

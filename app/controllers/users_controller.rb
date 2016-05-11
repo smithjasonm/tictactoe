@@ -14,8 +14,12 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
-    render layout: 'cover'
+    if user_session.logged_in?
+      redirect_to games_url
+    else
+      @user = User.new
+      render layout: 'cover'
+    end
   end
 
   # GET /users/1/edit
@@ -29,7 +33,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        user_session.log_in @user
+        format.html { redirect_to @user }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, layout: 'cover' }
@@ -43,7 +48,10 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html do
+          flash[:success] = "Your settings have been updated."
+          redirect_to @user
+        end
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -56,8 +64,12 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     @user.destroy
+    user_session.log_out
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html do
+        flash[:success] = "Your account has been deleted."
+        redirect_to root_url
+      end
       format.json { head :no_content }
     end
   end

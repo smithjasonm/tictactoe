@@ -13,7 +13,7 @@
   <%= f.password_field :password_confirmation, hide_label: true,
                                                placeholder: 'Confirm password' %>
   <%= f.form_group do %>
-    <%= f.submit @user.new_record? ? 'Sign up' : 'Submit',
+    <%= f.submit @user.new_record? ? 'Sign up' : 'Update',
                  class: 'btn btn-lg btn-primary btn-block' %>
   <% end %>
 <% end %>

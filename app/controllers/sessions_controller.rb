@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   layout 'cover'
   
   def new
+    redirect_to games_url if user_session.logged_in?
   end
   
   def create

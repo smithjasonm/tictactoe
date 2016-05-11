@@ -1,6 +1,13 @@
-<h1>Editing User</h1>
+<% content_for :title do -%>
+  <%= 'Settings' %>
+<% end -%>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+<div class="row">
+  <div class="col-sm-6">
+    <%= gravatar_image_tag(@user, :profile) %>
+  </div>
+  <div class="col-sm-6">
+    <h2 class="text-center"><%= 'your account' %></h2>
+    <%= render 'form' %>
+  </div>
+</div>

@@ -1,9 +1,13 @@
-<h1 class="cover-heading">Create Account</h1>
+<% content_for :title do -%>
+  <%= 'Sign up' %>
+<% end -%>
 
-<div class="new-user-content">
+<h1 class="cover-heading">Create account</h1>
+
+<div class="new-user-content form-content">
   <%= render 'form' %>
   
-  <p class="existing-account-instruction">
-    Have an account? <%= link_to 'Log in', '#' %>
+  <p class="foot-notice">
+    Have an account? <%= link_to 'Log in', login_path %>
   </p>
 </div>

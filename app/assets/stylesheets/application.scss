@@ -21,3 +21,11 @@
 .nowrap {
   white-space: nowrap;
 }
+
+// Navigation bar avatar
+.navbar .avatar {
+  display: inline-block;
+  max-height: 28px;
+  margin-top: -10px;
+  margin-bottom: -10px;
+}

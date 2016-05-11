@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="home-page"> <!-- Note: ID is referenced in script at end of body. -->
+<html id="cover-page"> <!-- Note: ID is referenced in script at end of body. -->
   <head>
     <title>Tic-Tac-Toe</title>
     <%= render 'layouts/head' %>
@@ -19,13 +19,14 @@
                   <%= nav_link 'Home', root_path %>
                   <%= nav_link 'Features', '#' %>
                   <%= nav_link 'Contact', '#' %>
-                  <%= nav_link 'Login', '#' %>
+                  <%= nav_link 'Login', login_path %>
                 </ul>
               </nav>
             </div>
           </div>
 
           <div class="inner cover">
+            <%= render 'layouts/flash' %>
             <%= yield %>
           </div>
 
@@ -43,7 +44,7 @@
     
     <script>
       // Must reset document ID, as Turbolinks will not update it.
-      document.documentElement.id = "home-page";
+      document.documentElement.id = "cover-page";
     </script>
   </body>
 </html>

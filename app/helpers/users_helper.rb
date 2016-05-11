@@ -1,9 +1,4 @@
 module UsersHelper
-  # TODO: define current_user
-  def current_user
-    nil
-  end
-  
   # Get a Gravatar image tag for a user and context.
   def gravatar_image_tag(user, context = nil)
     context = context.try(:to_sym)

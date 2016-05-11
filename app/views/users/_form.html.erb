@@ -1,16 +1,19 @@
-<%= bootstrap_form_for(@user, inline_errors: false) do |f| %>
-  <%= f.text_field :handle, label: <<-LABEL.html_safe
-      Nickname
+<%= bootstrap_form_for(@user, inline_errors: true) do |f| %>
+  <%= f.text_field :handle, hide_label: true, placeholder: 'Username' %>
+  <% # May need this this later for tooltip
+    <<-LABEL.html_safe
       <span class="glyphicon glyphicon-question-sign" aria-hidden="true"
             data-toggle="tooltip" data-placement="auto right"
             title="#{ Rails.configuration.x.minimum_handle_length }–#{ Rails.configuration.x.maximum_handle_length } alphanumeric characters">
       </span>
       LABEL
   %>
-  <%= f.email_field :email %>
-  <%= f.password_field :password %>
-  <%= f.password_field :password_confirmation %>
+  <%= f.email_field :email, hide_label: true, placeholder: 'Email address' %>
+  <%= f.password_field :password, hide_label: true, placeholder: 'Password' %>
+  <%= f.password_field :password_confirmation, hide_label: true,
+                                               placeholder: 'Confirm password' %>
   <%= f.form_group do %>
-    <%= f.submit @user.new_record? ? 'Register' : 'Submit' %>
+    <%= f.submit @user.new_record? ? 'Sign up' : 'Submit',
+                 class: 'btn btn-lg btn-primary btn-block' %>
   <% end %>
 <% end %>

@@ -1,17 +1,19 @@
 Rails.application.routes.draw do
-  get 'static_pages/help'
-
-  get 'static_pages/about'
-
-  get 'sessions/new'
+  root               'static_pages#home'
+  
+  get    'help'   => 'static_pages#help'
+  get    'about'  => 'static_pages#about'
+  
+  get    'login'  => 'sessions#new'
+  post   'login'  => 'sessions#create'
+  delete 'logout' => 'sessions#destroy'
 
   resources :games do #, only: [:index, :show, :create, :update, :destroy] do
     resources :plays, only: [:index, :create] #, format: 'json'
     post 'quit', on: :member
   end
-  resources :users
   
-  root 'static_pages#home'
+  resources :users
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

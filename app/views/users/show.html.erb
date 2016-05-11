@@ -2,17 +2,13 @@
   <%= @user.handle %>
 <% end -%>
 
-<% if notice -%>
-  <p id="notice" class="alert alert-info" role="alert"><%= notice %></p>
-<% end -%>
-
 <div class="row">
   <div class="col-sm-6">
     <%= gravatar_image_tag(@user, :profile) %>
   </div>
   <div class="col-sm-6">
     <h2 class="text-center"><%= @user.handle %></h2>
-    <% unless current_user == @user -%>
+    <% unless user_session.current_user == @user -%>
       <%= render partial: 'pair_record', object: @user.game_record(current_user) %>
     <% end -%>
     <%= render partial: 'full_record', object: @user.game_record %>

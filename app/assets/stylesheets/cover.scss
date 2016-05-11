@@ -1,12 +1,12 @@
 // Adapted from http://getbootstrap.com/examples/cover/
 
-#home-page,
-#home-page body {
+#cover-page,
+#cover-page body {
   height: 100%;
   background-color: #333;
 }
 
-#home-page {
+#cover-page {
   /*
    * Globals
    */
@@ -16,16 +16,6 @@
   a:focus,
   a:hover {
     color: #fff;
-  }
-
-  /* Custom default button */
-  .btn-default,
-  .btn-default:hover,
-  .btn-default:focus {
-    color: #333;
-    text-shadow: none; /* Prevent inheritence from `body` */
-    background-color: #fff;
-    border: 1px solid #fff;
   }
 
 
@@ -121,18 +111,32 @@
     padding: 10px 20px;
     font-weight: bold;
   }
+  .alert {
+    text-shadow: none;
+  }
   .home-content {
-    .existing-account-instruction {
+    /* Custom default button */
+    .btn-default,
+    .btn-default:hover,
+    .btn-default:focus {
+      color: #333;
+      text-shadow: none; /* Prevent inheritence from `body` */
+      background-color: #fff;
+      border: 1px solid #fff;
+    }
+    
+    .foot-notice {
       margin: -10px;
     }
   }
-  .new-user-content {
+  .form-content {
     max-width: 350px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
   }
-  .existing-account-instruction {
+  .foot-notice {
+    text-align: center;
     color: #aaa;
     a,
     a:focus,

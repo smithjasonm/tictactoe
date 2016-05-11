@@ -1,2 +1,12 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<% content_for :title do -%>
+  <%= 'Log in' %>
+<% end -%>
+
+<h1>Log in</h1>
+
+<div class="new-session-content form-content">
+  <%= render 'form' %>
+  <p class="foot-notice">
+    New user? <%= link_to 'Sign up', new_user_path %>
+  </p>
+</div>

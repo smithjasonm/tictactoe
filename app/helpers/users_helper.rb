@@ -5,14 +5,19 @@ module UsersHelper
     case context
     when :profile
       size = 350
+      img_alt = user.handle
+    when :nav
+      size = 28
+      img_alt = ""
     else
       size = 80
+      img_alt = user.handle
     end
     email = user.nil? ? "" : user.email
     
     image_tag avatar_url(email, size),
                           class: 'avatar img-responsive img-rounded center-block',
-                          alt: 'Avatar'
+                          alt: img_alt
   end
   
   private

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html id="cover-page"> <!-- Note: ID is referenced in script at end of body. -->
+<html>
   <head>
     <title>Tic-Tac-Toe</title>
     <%= render 'layouts/head' %>
   </head>
-  <body data-no-turbolink>
+  <body>
     <div class="site-wrapper">
 
       <div class="site-wrapper-inner">
@@ -41,10 +41,5 @@
       </div>
 
     </div>
-    
-    <script>
-      // Must reset document ID, as Turbolinks will not update it.
-      document.documentElement.id = "cover-page";
-    </script>
   </body>
 </html>

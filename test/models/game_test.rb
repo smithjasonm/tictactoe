@@ -230,7 +230,30 @@ class GameTest < ActiveSupport::TestCase
   
   test "should return whether game is pending" do
     assert games(:pending_game).pending?
+    assert games(:new_game).pending?
+    assert games(:waiting_game).pending?
     assert_not games(:forfeited_game).pending?
+  end
+  
+  test "should return whether game is ongoing" do
+    assert games(:pending_game).ongoing?
+    assert games(:new_game).ongoing?
+    assert_not games(:waiting_game).ongoing?
+    assert_not games(:forfeited_game).ongoing?
+  end
+  
+  test "should return whether game is waiting" do
+    assert games(:waiting_game).waiting?
+    assert_not games(:pending_game).waiting?
+    assert_not games(:new_game).waiting?
+    assert_not games(:forfeited_game).waiting?
+  end
+  
+  test "should return whether game is completed" do
+    assert games(:forfeited_game).completed?
+    assert_not games(:pending_game).completed?
+    assert_not games(:new_game).completed?
+    assert_not games(:waiting_game).completed?
   end
   
   private

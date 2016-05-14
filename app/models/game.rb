@@ -144,6 +144,21 @@ class Game < ActiveRecord::Base
     status == PENDING
   end
   
+  # Determine whether game is ongoing, i.e., is pending and has two players
+  def ongoing?
+    status == PENDING && player2_id.present?
+  end
+  
+  # Determine whether game is waiting, i.e., is pending and has only one player
+  def waiting?
+    status == PENDING && player2_id.nil?
+  end
+  
+  # Determine whether game is completed
+  def completed?
+    status != PENDING
+  end
+  
   private
     
     # Update pending-game status based on plays made so far.

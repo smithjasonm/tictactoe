@@ -256,6 +256,22 @@ class GameTest < ActiveSupport::TestCase
     assert_not games(:waiting_game).completed?
   end
   
+  test "should get waiting games without excluded user" do
+    waiting_games = Game.waiting_games
+    assert_equal 1, waiting_games.size
+    assert_equal games(:waiting_game).id, waiting_games[0].id
+  end
+  
+  test "should get waiting games with excluded user" do
+    user = users(:one)
+    assert_empty Game.waiting_games(user)
+    
+    user = users(:two)
+    waiting_games = Game.waiting_games(user)
+    assert_equal 1, Game.waiting_games.size
+    assert_equal games(:waiting_game).id, waiting_games[0].id
+  end
+  
   private
   
     # Cause the given new game to be drawn

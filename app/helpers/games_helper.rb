@@ -66,7 +66,7 @@ module GamesHelper
       else
         render partial: 'resign_game_form', locals: locals
       end
-    else
+    elsif user_session.current_user.waiting_game.nil?
       render partial: 'new_game_form', locals: { game: new_game }
     end
   end

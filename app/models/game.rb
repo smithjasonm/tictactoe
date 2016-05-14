@@ -159,6 +159,14 @@ class Game < ActiveRecord::Base
     status != PENDING
   end
   
+  # Fetch all waiting games, optionally excluding those created by user with given id,
+  # sorted in descending order by time created.
+  def self.waiting_games(excluded_user_id = nil)
+    result = Game.where(status: Game::PENDING, player2_id: nil).order('created_at DESC')
+    result = result.where.not(player1_id: excluded_user_id) if excluded_user_id
+    return result
+  end
+  
   private
     
     # Update pending-game status based on plays made so far.

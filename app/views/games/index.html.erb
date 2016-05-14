@@ -6,19 +6,24 @@
   <div class="col-sm-6 col-sm-push-3 game-col">
     <div class="game-container">
       <h2>Ongoing games</h2>
-      <%= render partial: 'ongoing_game', collection: @user.ongoing_games %>
-      <%= render partial: 'new_game_form', locals: { game: @new_game } %>
+      <%= render partial: 'ongoing_game', collection: @ongoing_games %>
+      <% if @user.waiting_game.nil? -%>
+        <%= render partial: 'new_game_form', locals: { game: @new_game } %>
+      <% end -%>
     </div>
   </div>
   <div class="col-sm-3 col-sm-pull-6">
-    <h2>Join a game</h2>
-    <%= render partial: 'waiting_game', collection: @user.waiting_games,
+    <h2>Waiting games</h2>
+    <% if @user_waiting_game -%>
+      <%= render partial: 'user_waiting_game', object: @user_waiting_game %>
+    <% end -%>
+    <%= render partial: 'waiting_game', collection: @waiting_games,
                                             locals: { user: @user } %>
   </div>
   <div class="col-sm-3">
-    <%= render partial: 'full_record', object: @user.game_record,
+    <%= render partial: 'full_record', object: @game_record,
                                        locals: { user: @user } %>
     <h2>Completed games</h2>
-    <%= render partial: 'completed_game', collection: @user.completed_games %>
+    <%= render partial: 'completed_game', collection: @completed_games %>
   </div>
 </div>

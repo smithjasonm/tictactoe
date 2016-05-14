@@ -160,18 +160,10 @@ class UserTest < ActiveSupport::TestCase
   
   test "should get ongoing games" do
     user = users(:one)
-    expected = [games(:pending_game).id, games(:new_game).id, games(:waiting_game).id]
+    expected = [games(:pending_game).id, games(:new_game).id]
     ongoing_games = user.ongoing_games
-    assert_equal 3, ongoing_games.size
+    assert_equal 2, ongoing_games.size
     ongoing_games.each { |game| assert_includes expected, game.id }
-  end
-  
-  test "should get waiting games" do
-    user = users(:two)
-    expected = games(:waiting_game)
-    waiting_games = user.waiting_games
-    assert_equal 1, waiting_games.size
-    assert_equal expected.id, waiting_games[0].id
   end
   
   test "should get completed games" do
@@ -180,5 +172,10 @@ class UserTest < ActiveSupport::TestCase
     completed_games = user.completed_games
     assert_equal 1, completed_games.size
     assert_equal expected.id, completed_games[0].id
+  end
+  
+  test "should get waiting game if present" do
+    assert users(:one).waiting_game.try('waiting?')
+    assert_nil users(:two).waiting_game
   end
 end

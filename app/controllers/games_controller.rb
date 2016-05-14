@@ -6,6 +6,11 @@ class GamesController < ApplicationController
   def index
     @user = user_session.current_user
     @new_game = Game.new(player1_id: @user.id)
+    @ongoing_games = @user.ongoing_games
+    @waiting_games = Game.waiting_games(@user)
+    @user_waiting_game = @user.waiting_game
+    @completed_games = @user.completed_games
+    @game_record = @user.game_record
   end
 
   # GET /games/1
@@ -16,12 +21,12 @@ class GamesController < ApplicationController
       head :forbidden
       return
     end
-    if @game.status == Game::PENDING
+    if @game.pending?
       @next_play = Play.new
       @next_play.number = @game.next_play_number
       @new_game = nil
     else
-      @new_game = Game.new player1_id: user_id
+      @new_game = Game.new(player1_id: user_id)
     end
   end
 
@@ -39,11 +44,13 @@ class GamesController < ApplicationController
   def create
     game_params = params.require(:game).permit(:player1_id)
     @game = Game.new(game_params)
+    user = user_session.current_user
     
-    unless user_session.current_user.id == @game.player1_id
+    unless user.id == @game.player1_id && user.waiting_game.nil?
       head :forbidden
       return
     end
+    
     respond_to do |format|
       if @game.save
         format.html { redirect_to @game }

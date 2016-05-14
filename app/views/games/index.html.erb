@@ -21,8 +21,8 @@
                                             locals: { user: @user } %>
   </div>
   <div class="col-sm-3">
-    <%= render partial: 'full_record', object: @game_record,
-                                       locals: { user: @user } %>
+    <h2><%= full_record_title(@user) %></h2>
+    <%= render partial: 'record_list', object: @game_record %>
     <h2>Completed games</h2>
     <%= render partial: 'completed_game', collection: @completed_games %>
   </div>

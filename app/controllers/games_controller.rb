@@ -16,7 +16,8 @@ class GamesController < ApplicationController
   # GET /games/1
   # GET /games/1.json
   def show
-    user_id = user_session.current_user.id
+    user = user_session.current_user
+    user_id = user.id
     unless user_id == @game.player1_id || user_id == @game.player2_id
       head :forbidden
       return
@@ -28,6 +29,8 @@ class GamesController < ApplicationController
     else
       @new_game = Game.new(player1_id: user_id)
     end
+    @opponent = user_id == @game.player1_id ? @game.player2 : @game.player1
+    @pair_record = user.game_record(@opponent) if @opponent
   end
 
   # GET /games/new

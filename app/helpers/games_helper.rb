@@ -75,14 +75,4 @@ module GamesHelper
   def resign_status(game)
     user_session.current_user.id == game.player1_id ? Game::P1_FORFEIT : Game::P2_FORFEIT
   end
-  
-  # Render user's game record against current opponent if present
-  def pair_record(game)
-    unless game.player2_id.nil?
-      user = user_session.current_user
-      opponent = user.id == game.player1_id ? game.player2 : game.player1
-      render partial: 'pair_record', object: user.game_record(opponent),
-                                           locals: { opponent: opponent }
-    end
-  end
 end

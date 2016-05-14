@@ -9,6 +9,11 @@ module ApplicationHelper
     end
   end
   
+  # Get the title for the current user's record against the given user.
+  def pair_record_title(user)
+    'You vs. ' + user.handle
+  end
+  
   # Get the title for the given user's record according to whether the user is
   # the one logged in.
   def full_record_title(user)

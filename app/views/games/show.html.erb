@@ -13,7 +13,10 @@
     </div>
   </div>
   <div class="col-sm-4 col-sm-offset-1">
-    <%= pair_record(@game) %>
+    <% if @opponent %>
+      <h3><%= pair_record_title(@opponent) %></h3>
+      <%= render partial: 'record_list', object: @pair_record %>
+    <% end %>
   </div>
 </div>
 

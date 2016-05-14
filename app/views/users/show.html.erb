@@ -8,11 +8,11 @@
   </div>
   <div class="col-sm-6">
     <h2 class="text-center"><%= @user.handle %></h2>
-    <% unless user_session.current_user == @user -%>
-      <%= render partial: 'pair_record', object: @user.game_record(current_user),
-                                         locals: { opponent: @user } %>
+    <% if @pair_record -%>
+      <h3><%= pair_record_title(@user) %></h3>
+      <%= render partial: 'record_list', object: @pair_record %>
     <% end -%>
-    <%= render partial: 'full_record', object: @user.game_record,
-                                       locals: { user: @user } %>
+    <h3><%= full_record_title(@user) %></h3>
+    <%= render partial: 'record_list', object: @full_record %>
   </div>
 </div>

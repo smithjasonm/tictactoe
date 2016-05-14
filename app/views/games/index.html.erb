@@ -2,32 +2,23 @@
   Games
 <% end -%>
 
-<h1>Listing Games</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Player1</th>
-      <th>Player2</th>
-      <th>Status</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @games.each do |game| %>
-      <tr>
-        <td><%= game.player1_id %></td>
-        <td><%= game.player2_id %></td>
-        <td><%= game.status %></td>
-        <td><%= link_to 'Show', game %></td>
-        <td><%= link_to 'Edit', edit_game_path(game) %></td>
-        <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Game', new_game_path %>
+<div class="row">
+  <div class="col-sm-6 col-sm-push-3 game-col">
+    <div class="game-container">
+      <h2>Ongoing games</h2>
+      <%= render partial: 'ongoing_game', collection: @user.ongoing_games %>
+      <%= render partial: 'new_game_form', locals: { game: @new_game } %>
+    </div>
+  </div>
+  <div class="col-sm-3 col-sm-pull-6">
+    <h2>Join a game</h2>
+    <%= render partial: 'waiting_game', collection: @user.waiting_games,
+                                            locals: { user: @user } %>
+  </div>
+  <div class="col-sm-3">
+    <%= render partial: 'full_record', object: @user.game_record,
+                                       locals: { user: @user } %>
+    <h2>Completed games</h2>
+    <%= render partial: 'completed_game', collection: @user.completed_games %>
+  </div>
+</div>

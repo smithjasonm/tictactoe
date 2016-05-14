@@ -23,6 +23,7 @@ class Game < ActiveRecord::Base
     
     # Maintain state of game as 3x3 array containing in each space 1, 2, or nil
     # (for plays by player 1, plays by player 2, and empty spaces respectively).
+    # TODO: Fetch plays lazily
     @state = Array.new(3) { Array.new(3) }
     plays.each { |play| @state[play.x][play.y] = play.player }
   end
@@ -79,7 +80,6 @@ class Game < ActiveRecord::Base
   end
   
   # Register forfeit by player 1.
-  # TODO: Refactor
   def player1_forfeits
     with_lock do
       unless status == PENDING || status == P1_FORFEIT
@@ -117,6 +117,31 @@ class Game < ActiveRecord::Base
     else
       raise InvalidUserError, "User #{user.id} is not a player in this game"
     end
+  end
+  
+  # Get player whose turn it is. Return nil if game is not pending.
+  def whose_turn
+    return nil unless status == PENDING
+    return plays.size.even? ? player1 : player2
+  end
+  
+  # Get winning player. Return nil if there is none.
+  def winner
+    case status
+    when PENDING, DRAW
+      return nil
+    when P1_WON, P2_FORFEIT
+      return player1
+    when P2_WON, P1_FORFEIT
+      return player2
+    else
+      raise "Status is invalid"
+    end
+  end
+  
+  # Determine whether game is pending
+  def pending?
+    status == PENDING
   end
   
   private

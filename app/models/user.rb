@@ -56,6 +56,28 @@ class User < ActiveRecord::Base
     return record
   end
   
+  # Get all games in which user is a participant
+  def all_games
+    created_games + joined_games
+  end
+  
+  # Get user's ongoing games.
+  def ongoing_games
+    all_games.select { |game| game.pending? }
+  end
+  
+  # Get waiting games, excluding any created by user
+  def waiting_games
+    Game.where(status: Game::PENDING, player2_id: nil).where.not(player1_id: id)
+  end
+  
+  # Get user's completed games
+  def completed_games
+    all_games.select { |game| !game.pending? }.sort! do |a, b|
+      b.updated_at <=> a.updated_at
+    end
+  end
+  
   private
     
     # Account for created games in record

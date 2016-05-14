@@ -4,7 +4,7 @@
 
 $(document).on "ready page:load", ->
   # Send play to server when an empty position of a pending game is clicked.
-  $(".game[data-status='0']").on "click", ".position.empty", (event) ->
+  $(".game.playable").on "click", ".position.empty", (event) ->
     position = $(this).data()
     
     $("#play_x").val position.x

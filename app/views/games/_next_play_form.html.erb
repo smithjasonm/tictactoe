@@ -1,0 +1,5 @@
+<%= form_for @next_play, url: [@game, @next_play] do |f| %>
+  <%= f.hidden_field :number %>
+  <%= f.hidden_field :x %>
+  <%= f.hidden_field :y %>
+<% end %>

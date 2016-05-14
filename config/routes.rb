@@ -10,7 +10,6 @@ Rails.application.routes.draw do
 
   resources :games do #, only: [:index, :show, :create, :update, :destroy] do
     resources :plays, only: [:index, :create] #, format: 'json'
-    post 'quit', on: :member
   end
   
   resources :users

@@ -1,0 +1,7 @@
+<div class="waiting-game">
+  <h3><%= waiting_game.player1.handle %></h3>
+  <div class="created_at">
+    Created <%= time_ago_in_words(waiting_game.created_at) %> ago
+  </div>
+  <%= render partial: 'join_game_form', locals: { game: waiting_game, user: user } %>
+</div>

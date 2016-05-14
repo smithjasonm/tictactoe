@@ -207,6 +207,32 @@ class GameTest < ActiveSupport::TestCase
     end
   end
   
+  test "whose_turn should return player whose turn it is" do
+    game = games(:pending_game)
+    assert_equal users(:one).id, game.whose_turn.id
+    game = games(:forfeited_game)
+    assert_nil game.whose_turn
+  end
+  
+  test "should return winning player if one exists" do
+    game = games(:forfeited_game) # Forfeited by player1 (user :one)
+    assert_equal users(:two).id, game.winner.id
+  end
+  
+  test "should return nil for winning player if one does not exist" do
+    game = games(:pending_game)
+    assert_nil game.winner
+    game = games(:waiting_game)
+    assert_nil game.winner
+    game = games(:new_game)
+    assert_nil game.winner
+  end
+  
+  test "should return whether game is pending" do
+    assert games(:pending_game).pending?
+    assert_not games(:forfeited_game).pending?
+  end
+  
   private
   
     # Cause the given new game to be drawn

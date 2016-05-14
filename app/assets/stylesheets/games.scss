@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .game {
+  margin: 20px 0;
   border-collapse: collapse;
   td {
     width: 100px;
@@ -17,5 +18,17 @@
   }
   tr:not(:last-child) {
     border-bottom: 2px solid green;
+  }
+  &.playable {
+    .empty {
+      cursor: pointer;
+    }
+  }
+}
+
+.game-col {
+  text-align: center;
+  .game-container {
+    display: inline-block;
   }
 }

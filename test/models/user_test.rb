@@ -149,4 +149,36 @@ class UserTest < ActiveSupport::TestCase
     assert user.game_record.has_key?(:losses)
     assert user.game_record.has_key?(:draws)
   end
+  
+  test "should get all games" do
+    user = users(:two)
+    expected = [games(:pending_game).id, games(:new_game).id, games(:forfeited_game).id]
+    all_games = user.all_games
+    assert_equal 3, all_games.size
+    all_games.each { |game| assert_includes expected, game.id }
+  end
+  
+  test "should get ongoing games" do
+    user = users(:one)
+    expected = [games(:pending_game).id, games(:new_game).id, games(:waiting_game).id]
+    ongoing_games = user.ongoing_games
+    assert_equal 3, ongoing_games.size
+    ongoing_games.each { |game| assert_includes expected, game.id }
+  end
+  
+  test "should get waiting games" do
+    user = users(:two)
+    expected = games(:waiting_game)
+    waiting_games = user.waiting_games
+    assert_equal 1, waiting_games.size
+    assert_equal expected.id, waiting_games[0].id
+  end
+  
+  test "should get completed games" do
+    user = users(:one)
+    expected = games(:forfeited_game)
+    completed_games = user.completed_games
+    assert_equal 1, completed_games.size
+    assert_equal expected.id, completed_games[0].id
+  end
 end

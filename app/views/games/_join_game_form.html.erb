@@ -1,0 +1,4 @@
+<%= bootstrap_form_for(game) do |f| %>
+  <%= f.hidden_field :player2_id, value: user.id %>
+  <%= f.primary 'Join game' %>
+<% end %>

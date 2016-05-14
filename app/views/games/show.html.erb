@@ -1,36 +1,20 @@
 <% content_for :title do -%>
-  <%= "#{ @game.player1.handle } vs. #{ @game.player2.handle }" %>
+  <%= game_title(@game) %>
 <% end -%>
 
-<p>
-  <strong>Player1:</strong>
-  <%= @game.player1_id %>
-</p>
+<div class="row">
+  <div class="col-sm-6 game-col">
+    <div class="game-container">
+      <h2><%= game_title(@game, true) %></h2>
+      <%= render @game %>
+      <div class="whose_turn"><%= whose_turn(@game) %></div>
+      <%= quit_or_new_game_form(@game, @new_game) %>
+      <%= link_to "Back to games", games_path, class: 'btn btn-link' %>
+    </div>
+  </div>
+  <div class="col-sm-4 col-sm-offset-1">
+    <%= pair_record(@game) %>
+  </div>
+</div>
 
-<p>
-  <strong>Player2:</strong>
-  <%= @game.player2_id %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @game.status %>
-</p>
-
-<%= render @game %>
-
-<% if @game.status == Game::PENDING %>
-  <%= form_for @next_play, url: [@game, @next_play], remote: true do |f| %>
-    <%= f.hidden_field :number %>
-    <%= f.hidden_field :x %>
-    <%= f.hidden_field :y %>
-  <% end %>
-  
-  <%= form_for @game, url: { action: 'quit' }, method: 'post', remote: true,
-                      html: { class: 'quit_game', id: "quit_game_#{@game.id}" } do |f| %>
-    <%= f.submit 'Resign' %>
-  <% end %>
-<% end %>
-
-<%= link_to 'Edit', edit_game_path(@game) %> |
-<%= link_to 'Back', games_path %>
+<%= render 'next_play_form' if @game.pending? %>

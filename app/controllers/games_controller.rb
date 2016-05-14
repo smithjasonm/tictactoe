@@ -4,15 +4,24 @@ class GamesController < ApplicationController
   # GET /games
   # GET /games.json
   def index
-    @games = Game.all
+    @user = user_session.current_user
+    @new_game = Game.new(player1_id: @user.id)
   end
 
   # GET /games/1
   # GET /games/1.json
   def show
+    user_id = user_session.current_user.id
+    unless user_id == @game.player1_id || user_id == @game.player2_id
+      head :forbidden
+      return
+    end
     if @game.status == Game::PENDING
       @next_play = Play.new
       @next_play.number = @game.next_play_number
+      @new_game = nil
+    else
+      @new_game = Game.new player1_id: user_id
     end
   end
 
@@ -28,11 +37,16 @@ class GamesController < ApplicationController
   # POST /games
   # POST /games.json
   def create
+    game_params = params.require(:game).permit(:player1_id)
     @game = Game.new(game_params)
-
+    
+    unless user_session.current_user.id == @game.player1_id
+      head :forbidden
+      return
+    end
     respond_to do |format|
       if @game.save
-        format.html { redirect_to @game, notice: 'Game was successfully created.' }
+        format.html { redirect_to @game }
         format.json { render :show, status: :created, location: @game }
       else
         format.html { render :new }
@@ -44,35 +58,55 @@ class GamesController < ApplicationController
   # PATCH/PUT /games/1
   # PATCH/PUT /games/1.json
   def update
-    respond_to do |format|
-      if @game.update(game_params)
-        format.html { redirect_to @game, notice: 'Game was successfully updated.' }
-        format.json { render :show, status: :ok, location: @game }
+    user_id = user_session.current_user.id
+    game_params = params.require(:game).permit(:player2_id, :status)
+    if game_params[:status]
+      case game_params[:status].to_i
+      when Game::P1_FORFEIT
+        unless user_id == @game.player1.id
+          head :forbidden
+          return
+        end
+        @game.player1_forfeits
+      when Game::P2_FORFEIT
+        unless user_id == @game.player2.id
+          head :forbidden
+          return
+        end
+        @game.player2_forfeits
       else
-        format.html { render :edit }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
+        head :forbidden
+        return
       end
+    elsif game_params[:player2_id]
+      player2_id = game_params[:player2_id].to_i
+      unless @game.player2_id.nil? && user_id == player2_id
+        head :forbidden
+        return
+      end
+      @game.update!(player2_id: player2_id)
+    else
+      head :bad_request
+      return
+    end
+    respond_to do |format|
+      format.html { redirect_to @game }
+      format.json { render :show, status: :ok, location: @game }
     end
   end
 
   # DELETE /games/1
   # DELETE /games/1.json
   def destroy
+    user_id = user_session.current_user.id
+    unless user_id == @game.player1_id && @game.player2.nil?
+      head :forbidden
+      return
+    end
     @game.destroy
     respond_to do |format|
-      format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
+      format.html { redirect_to games_url }
       format.json { head :no_content }
-    end
-  end
-  
-  # POST /games/1/quit
-  # POST /games/1/quit.json
-  def quit
-    raise "current_user must first be implemented"
-    @game.resign current_user
-    respond_to do |format|
-      format.html { redirect_to @game, notice: 'Game was successfully quit.' }
-      format.json { render :show, status: :ok, location: @game }
     end
   end
 
@@ -80,10 +114,5 @@ class GamesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_game
       @game = Game.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def game_params
-      params.require(:game).permit(:player1_id, :player2_id)
     end
 end

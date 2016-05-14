@@ -1,0 +1,4 @@
+<%= bootstrap_form_for game do |f| %>
+  <%= f.hidden_field :status, value: resign_status(game) %>
+  <%= f.submit 'Resign' %>
+<% end %>

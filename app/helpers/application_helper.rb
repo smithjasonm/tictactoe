@@ -13,9 +13,14 @@ module ApplicationHelper
   # the one logged in.
   def full_record_title(user)
     if user.id == user_session.current_user.id
-      return 'your record'
+      return 'Your record'
     else
       return "#{ user.handle }'s record"
     end
+  end
+  
+  # Get copyright text
+  def copyright
+    "© #{ Date.today.year } JMS"
   end
 end

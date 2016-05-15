@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(@user, inline_errors: true) do |f| %>
+<%= bootstrap_form_for @user, remote: true, format: :js, inline_errors: true do |f| %>
   <%= f.text_field :handle, hide_label: true, placeholder: 'Username' %>
   <% # May need this this later for tooltip
     <<-LABEL.html_safe

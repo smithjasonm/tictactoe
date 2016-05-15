@@ -38,11 +38,12 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         user_session.log_in @user
-        format.html { redirect_to @user }
+        format.any(:html, :js) { redirect_to @user }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, layout: 'cover' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -52,7 +53,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html do
+        format.any(:html, :js) do
           flash[:success] = "Your settings have been updated."
           redirect_to @user
         end
@@ -60,6 +61,7 @@ class UsersController < ApplicationController
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end

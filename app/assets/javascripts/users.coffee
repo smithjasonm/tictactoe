@@ -3,5 +3,5 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 # May need this for tooltip
-#$(document).on "ready page:load", ->
+#$(document).on "turbolinks:load", ->
 #  $('[data-toggle="tooltip"]').tooltip()

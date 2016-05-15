@@ -2,5 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$(document).on "ready page:load", ->
-  $('[data-toggle="tooltip"]').tooltip()
+# May need this for tooltip
+#$(document).on "ready page:load", ->
+#  $('[data-toggle="tooltip"]').tooltip()

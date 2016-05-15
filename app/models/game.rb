@@ -20,12 +20,6 @@ class Game < ApplicationRecord
   after_initialize do |game|
     # Initialize status if new game. (Status should be set only from within this class.)
     self.status = PENDING if new_record?
-    
-    # Maintain state of game as 3x3 array containing in each space 1, 2, or nil
-    # (for plays by player 1, plays by player 2, and empty spaces respectively).
-    # TODO: Fetch plays lazily
-    @state = Array.new(3) { Array.new(3) }
-    plays.each { |play| @state[play.x][play.y] = play.player }
   end
   
   # Return next valid play number, or -1 if game is not pending
@@ -47,14 +41,14 @@ class Game < ApplicationRecord
     unless position_valid?(x, y)
       raise InvalidPlayPositionError
     end
-    @state[x][y].nil?
+    state[x][y].nil?
   end
   
   def position_state(x, y)
     unless position_valid?(x, y)
       raise InvalidPlayPositionError
     end
-    @state[x][y]
+    state[x][y]
   end
   
   # Make a play. Saves play and self automatically. Returns the new play.
@@ -72,7 +66,7 @@ class Game < ApplicationRecord
       end
       
       play = plays.create! number: number, x: x, y: y
-      @state[x][y] = play.player
+      state[x][y] = play.player
       update_status
       save!
     end
@@ -169,6 +163,16 @@ class Game < ApplicationRecord
   
   private
     
+    # Get current game state, maintained as 3x3 array containing in each space 1, 2, or
+    # nil (for plays by player 1, plays by player 2, and empty spaces respectively).
+    def state
+      if @state.nil?
+        @state = Array.new(3) { Array.new(3) }
+        plays.each { |play| @state[play.x][play.y] = play.player }
+      end
+      @state
+    end
+    
     # Update pending-game status based on plays made so far.
     def update_status
       if status == PENDING && plays.length > 2
@@ -192,8 +196,9 @@ class Game < ApplicationRecord
     # Check whether a given row contains a winning combination;
     # if it does, return number of winning player; otherwise, return false.
     def check_row(row)
-      x = @state[0][row]
-      if !x.nil? && x == @state[1][row] && x == @state[2][row]
+      _state = state
+      x = _state[0][row]
+      if !x.nil? && x == _state[1][row] && x == _state[2][row]
         return x
       else
         return false
@@ -203,8 +208,9 @@ class Game < ApplicationRecord
     # Check whether a given column contains a winning combination;
     # if it does, return number of winning player; otherwise, return false.
     def check_column(col)
-      x = @state[col][0]
-      if !x.nil? && x == @state[col][1] && x == @state[col][2]
+      _state = state
+      x = _state[col][0]
+      if !x.nil? && x == _state[col][1] && x == _state[col][2]
         return x
       else
         return false
@@ -214,8 +220,9 @@ class Game < ApplicationRecord
     # Check whether diagonal beginning at top left contains a winning combination;
     # if it does, return number of winning player; otherwise, return false.
     def check_diagonal_left_right
-      x = @state[0][0]
-      if !x.nil? && x == @state[1][1] && x == @state[2][2]
+      _state = state
+      x = _state[0][0]
+      if !x.nil? && x == _state[1][1] && x == _state[2][2]
         return x
       else
         return false
@@ -225,8 +232,9 @@ class Game < ApplicationRecord
     # Check whether diagonal beginning at top right contains a winning combination;
     # if it does, return number of winning player; otherwise, return false.
     def check_diagonal_right_left
-      x = @state[2][0]
-      if !x.nil? && x == @state[1][1] && x == @state[0][2]
+      _state = state
+      x = _state[2][0]
+      if !x.nil? && x == _state[1][1] && x == _state[0][2]
         return x
       else
         return false

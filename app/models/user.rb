@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_secure_password
   has_many :created_games, class_name: "Game", foreign_key: "player1_id",
                            inverse_of: :player1

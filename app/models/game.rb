@@ -1,4 +1,4 @@
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   # Game statuses
   PENDING = 0
   P1_WON = 1

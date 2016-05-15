@@ -1,4 +1,4 @@
-class Play < ActiveRecord::Base
+class Play < ApplicationRecord
   belongs_to :game, inverse_of: :plays
   
   validates :x, :y, numericality: { only_integer: true, greater_than_or_equal_to: 0,

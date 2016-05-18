@@ -7,7 +7,7 @@
     <div class="game-container">
       <h2><%= game_title(@game, true) %></h2>
       <%= render @game %>
-      <div class="whose_turn"><%= whose_turn(@game) %></div>
+      <p class="whose_turn"><%= whose_turn(@game) %></p>
       <%= quit_or_new_game_form(@game, @new_game) %>
       <%= link_to "Back to games", games_path, class: 'btn btn-link' %>
     </div>

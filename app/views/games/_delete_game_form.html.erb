@@ -1,3 +1,5 @@
 <%= bootstrap_form_for game, method: 'delete', remote: true do |f| %>
-  <%= f.submit 'Quit' %>
+  <%= f.form_group do %>
+    <%= f.submit 'Quit' %>
+  <% end %>
 <% end %>

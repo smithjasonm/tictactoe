@@ -1,4 +1,6 @@
 <%= bootstrap_form_for game, remote: true do |f| %>
   <%= f.hidden_field :player2_id, value: user.id %>
-  <%= f.primary 'Join game' %>
+  <%= f.form_group do %>
+    <%= f.primary 'Join game' %>
+  <% end %>
 <% end %>

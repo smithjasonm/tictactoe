@@ -1,4 +1,6 @@
 <%= bootstrap_form_for game, remote: true do |f| %>
   <%= f.hidden_field :status, value: resign_status(game) %>
-  <%= f.submit 'Resign' %>
+  <%= f.form_group do %>
+    <%= f.submit 'Resign', class: 'btn btn-default btn-sm' %>
+  <% end %>
 <% end %>

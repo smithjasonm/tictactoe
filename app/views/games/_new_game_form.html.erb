@@ -1,4 +1,6 @@
 <%= bootstrap_form_for game, remote: true do |f| %>
   <%= f.hidden_field :player1_id %>
-  <%= f.submit 'Start a new game', class: 'btn btn-primary btn-lg' %>
+  <%= f.form_group do %>
+    <%= f.submit 'Start a new game' %>
+  <% end %>
 <% end %>

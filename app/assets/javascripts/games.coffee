@@ -12,7 +12,9 @@ App.Game =
 
 # Send play to server when an empty position of a pending game is clicked.
 $(document).on "click", ".game.playable .position.empty", (event) ->
-  position = $(this).data()
+  $this = $(this)
+  return if $this.closest(".game-preview").length > 0
+  position = $this.data()
   
   play =
     x: position.x

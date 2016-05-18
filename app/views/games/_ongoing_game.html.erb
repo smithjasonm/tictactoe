@@ -1,3 +1,12 @@
-<h3><%= link_to game_title(ongoing_game), ongoing_game %></h3>
-<%= render ongoing_game %>
-<%= whose_turn(ongoing_game) %>
+<div class="row">
+  <div class="col-sm-3">
+    <div class="game-preview">
+      <%= render partial: ongoing_game %>
+    </div>
+  </div>
+  <div class="col-sm-9">
+    <h3><%= link_to game_title(ongoing_game), ongoing_game %></h3>
+    <div>Last activity <%= time_ago_in_words(ongoing_game.updated_at) %> ago</div>
+    <div><%= whose_turn(ongoing_game) %></div>
+  </div>
+</div>

@@ -21,8 +21,7 @@ module GamesHelper
   
   def game_class(game)
     result = 'game'
-    if game.pending? && game.player2_id.present? &&
-                        game.whose_turn.id == user_session.current_user.id
+    if game.ongoing? && game.whose_turn.id == user_session.current_user.id
       result += ' playable'
     end
     return result

@@ -32,3 +32,23 @@
     display: inline-block;
   }
 }
+
+.game-preview .game {
+  float: left;
+  margin-right: 20px;
+  @media (min-width: $screen-sm-min) {
+    float: none;
+    margin-left: auto;
+    margin-right: 0;
+  }
+  td {
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+  }
+  &.playable {
+    .empty {
+      cursor: default;
+    }
+  }
+}

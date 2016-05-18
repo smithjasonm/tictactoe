@@ -16,7 +16,7 @@ module GamesHelper
     cell_data = { x: col, y: row}
     
     game_cell = { cell_class: cell_class, cell_data: cell_data, cell_value: cell_value }
-    render partial: 'game_cell', object: game_cell
+    render partial: 'games/game_cell', object: game_cell
   end
   
   def game_class(game)
@@ -26,6 +26,13 @@ module GamesHelper
       result += ' playable'
     end
     return result
+  end
+  
+  # Return handle of current user's opponent in given game if present
+  def opponent_handle(game)
+    return nil if game.player2_id.nil?
+    user_session.current_user.id == game.player1_id ? game.player2.handle :
+                                                      game.player1.handle
   end
   
   # Return appropriate label to indicate which player's turn it is according to
@@ -62,12 +69,12 @@ module GamesHelper
     if game.pending?
       locals = { game: game }
       if game.player2_id.nil?
-        render partial: 'delete_game_form', locals: locals
+        render partial: 'games/delete_game_form', locals: locals
       else
-        render partial: 'resign_game_form', locals: locals
+        render partial: 'games/resign_game_form', locals: locals
       end
     elsif user_session.current_user.waiting_game.nil?
-      render partial: 'new_game_form', locals: { game: new_game }
+      render partial: 'games/new_game_form', locals: { game: new_game }
     end
   end
   

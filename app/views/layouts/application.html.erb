@@ -15,5 +15,8 @@
     <%= render 'layouts/flash' %>
     <%= yield %>
   </div>
+  <script>
+    App.User.id = <%= user_session.current_user.id %>;
+  </script>
 </body>
 </html>

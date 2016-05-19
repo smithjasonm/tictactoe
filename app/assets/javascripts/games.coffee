@@ -5,8 +5,8 @@
 window.App || (window.App = {})
 
 App.Game =
-  addPlay: (play) ->
-    $cell = $(".game [data-x='#{ play.x }'][data-y='#{ play.y }']")
+  addPlay: (gameId, play) ->
+    $cell = $(".game[data-id='#{ gameId }'] [data-x='#{ play.x }'][data-y='#{ play.y }']")
     symbol = if play.player == 1 then 'X' else 'O'
     $cell.text(symbol).removeClass("empty").addClass("filled")
 
@@ -14,30 +14,32 @@ App.Game =
 $(document).on "click", ".game.playable .position.empty", (event) ->
   $this = $(this)
   return if $this.closest(".game-preview").length > 0
+  
   position = $this.data()
+  $game = $this.closest(".game")
+  gameId = $game.data("id")
   
   play =
     x: position.x
     y: position.y
     player: if $("#play_number").val() % 2 == 1 then 1 else 2
   
-  App.Game.addPlay play
+  App.Game.addPlay gameId, play
   
-  $game = $(".game")
   $game.removeClass "playable"
   
   opponent_handle = $game.data("opponent-handle")
-  $(".whose_turn").text "#{ opponent_handle }'s turn"
+  $(".whose_turn[data-game-id='#{ gameId }']").text "#{ opponent_handle }'s turn"
   
   # $("#play_x").val position.x
   # $("#play_y").val position.y
   # $("#new_play").submit()
   
   data =
-    id: $game.data("id")
+    id: gameId
     play:
       x: position.x
       y: position.y
       number: +$("#play_number").val()
   
-  App.gameSubscription.make_play data
+  App.gameSubscriptions[gameId].make_play data

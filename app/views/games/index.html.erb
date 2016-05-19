@@ -25,8 +25,6 @@
     <% end -%>
   </div>
   <div class="col-sm-3">
-    <h2><%= full_record_title(@user) %></h2>
-    <%= render partial: 'record_list', object: @game_record %>
     <h2>Recent games</h2>
     <%= render partial: 'completed_game', collection: @recent_games %>
   </div>

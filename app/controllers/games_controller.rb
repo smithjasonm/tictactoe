@@ -10,7 +10,6 @@ class GamesController < ApplicationController
     @waiting_games = Game.waiting_games(@user)
     @user_waiting_game = @user.waiting_game
     @recent_games = @user.completed_games(5)
-    @game_record = @user.game_record
   end
 
   # GET /games/1

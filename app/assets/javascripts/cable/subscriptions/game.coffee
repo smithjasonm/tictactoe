@@ -12,7 +12,6 @@ App.unsubscribeFromOldGames = ($games) ->
     $(game).data("id")
   for own gameId, subscription of App.gameSubscriptions
     if +gameId not in gameIds
-      console.log "unsubscribing from game #{ gameId }"
       subscription.unsubscribe()
       delete App.gameSubscriptions[gameId]
 
@@ -22,7 +21,6 @@ App.subscribeToNewGames = ($games) ->
     $game = $(game)
     gameId = $game.data("id")
     if gameId not of App.gameSubscriptions
-      console.log "subscribing to game #{ gameId }"
       App.subscribe $game
 
 # Subscribe to game
@@ -41,9 +39,12 @@ App.subscribe = ($game) ->
     updateGame: (data) ->
       if data.status == 0
         if data.user_id != App.User.id
-          App.Game.addPlay gameId, data.latestPlay
-          $(".whose_turn[data-game-id='#{ gameId }']").text "Your turn"
-          $game.addClass "playable"
-        $("#play_number").val(data.latestPlay.number + 1)
+          if data.latestPlay
+            App.Game.addPlay gameId, data.latestPlay
+            $(".whose_turn[data-game-id='#{ gameId }']").text "Your turn"
+            $game.addClass "playable"
+          else
+            Turbolinks.visit(window.location)
+        $("#play_number").val(data.latestPlay.number + 1) if data.latestPlay
       else
         Turbolinks.visit(window.location)

@@ -174,6 +174,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal expected.id, completed_games[0].id
   end
   
+  test "should get completed games with limit specified" do
+    user = users(:one)
+    assert_equal 0, user.completed_games(0).size
+    assert_equal 1, user.completed_games(1).size
+    assert_equal 1, user.completed_games(2).size # user :one only has one completed game
+  end
+  
   test "should get waiting game if present" do
     assert users(:one).waiting_game.try('waiting?')
     assert_nil users(:two).waiting_game

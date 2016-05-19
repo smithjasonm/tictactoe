@@ -67,9 +67,12 @@ class User < ApplicationRecord
     all_games.select { |game| game.ongoing? }
   end
   
-  # Get user's completed games, sorted in descending order by time last updated.
-  def completed_games
-    all_games.select { |game| game.completed? }
+  # Get user's completed games, sorted in descending order by time last updated and
+  # optionally limited to a given number of games.
+  def completed_games(limit = nil)
+    result = all_games.select { |game| game.completed? }
+    result = result.take(limit) if limit
+    result
   end
   
   # Get user's waiting game, or return nil if absent.

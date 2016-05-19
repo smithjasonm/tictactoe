@@ -8,6 +8,9 @@
       <div class="row">
         <div class="col-sm-9 col-sm-offset-3">
           <h2>Ongoing games</h2>
+          <% if @ongoing_games.empty? %>
+            <p>No ongoing games</p>
+          <% end %>
         </div>
       </div>
       <%= render partial: 'ongoing_game', collection: @ongoing_games %>
@@ -20,6 +23,9 @@
     <% end -%>
     <%= render partial: 'waiting_game', collection: @waiting_games,
                                             locals: { user: @user } %>
+    <% if @user_waiting_game.nil? && @waiting_games.empty? %>
+      <p>No waiting games</p>
+    <% end %>
     <% if @user.waiting_game.nil? -%>
       <%= render partial: 'new_game_form', locals: { game: @new_game } %>
     <% end -%>
@@ -27,5 +33,8 @@
   <div class="col-sm-3">
     <h2>Recent games</h2>
     <%= render partial: 'completed_game', collection: @recent_games %>
+    <% if @recent_games.empty? %>
+      <p>No recent games</p>
+    <% end %>
   </div>
 </div>

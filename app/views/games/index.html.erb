@@ -16,7 +16,7 @@
       <%= render partial: 'ongoing_game', collection: @ongoing_games %>
     </div>
   </div>
-  <div class="col-sm-3 col-sm-pull-6">
+  <div class="waiting-games col-sm-3 col-sm-pull-6">
     <h2>Waiting games</h2>
     <% if @user_waiting_game -%>
       <%= render partial: 'user_waiting_game', object: @user_waiting_game %>

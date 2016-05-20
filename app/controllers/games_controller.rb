@@ -55,6 +55,7 @@ class GamesController < ApplicationController
     
     respond_to do |format|
       if @game.save
+        ActionCable.server.broadcast 'waiting_games', user_id: user.id
         format.html { redirect_to @game }
         format.json { render :show, status: :created, location: @game }
       else
@@ -94,6 +95,7 @@ class GamesController < ApplicationController
         return
       end
       @game.update!(player2_id: player2_id)
+      ActionCable.server.broadcast 'waiting_games', user_id: user_id
     else
       head :bad_request
       return
@@ -115,6 +117,7 @@ class GamesController < ApplicationController
       return
     end
     @game.destroy
+    ActionCable.server.broadcast 'waiting_games', user_id: user_id
     respond_to do |format|
       format.html { redirect_to games_url }
       format.json { head :no_content }

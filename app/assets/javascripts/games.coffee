@@ -29,7 +29,7 @@ $(document).on "click", ".game.playable .position.empty", (event) ->
   $game.removeClass "playable"
   
   opponent_handle = $game.data("opponent-handle")
-  $(".whose_turn[data-game-id='#{ gameId }']").text "#{ opponent_handle }'s turn"
+  $(".whose-turn[data-game-id='#{ gameId }']").text "#{ opponent_handle }'s turn"
   
   # $("#play_x").val position.x
   # $("#play_y").val position.y

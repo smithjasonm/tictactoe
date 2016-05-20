@@ -35,7 +35,7 @@ App.subscribeToGame = (gameId) ->
         if data.user_id != App.User.id
           if data.latestPlay
             App.Game.addPlay gameId, data.latestPlay
-            $(".whose_turn[data-game-id='#{ gameId }']").text "Your turn"
+            $(".whose-turn[data-game-id='#{ gameId }']").text "Your turn"
             $(".game[data-id='#{ gameId }']").addClass "playable"
           else
             Turbolinks.visit(window.location)

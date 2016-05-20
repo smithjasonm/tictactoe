@@ -7,7 +7,7 @@
     <div class="game-container">
       <h2><%= game_title(@game, true) %></h2>
       <%= render @game %>
-      <p class="whose_turn" data-game-id="<%= @game.id %>">
+      <p class="whose-turn" data-game-id="<%= @game.id %>">
         <%= whose_turn(@game) %>
       </p>
       <p class="game-status"><%= game_status_text(@game) %></p>

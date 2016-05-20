@@ -2,30 +2,24 @@ window.App || (window.App = {})
 App.gameSubscriptions = {}
 
 $(document).on "turbolinks:load", ->
-  $games = $(".game")
-  App.unsubscribeFromOldGames($games)
-  App.subscribeToNewGames($games)
-
-# Unsubscribe from games no longer visible
-App.unsubscribeFromOldGames = ($games) ->
-  gameIds = for game in $games
+  gameIds = for game in $(".game")
     $(game).data("id")
+  App.unsubscribeFromOldGames(gameIds)
+  App.subscribeToNewGames(gameIds)
+
+# Unsubscribe from updates for games absent from page
+App.unsubscribeFromOldGames = (gameIds) ->
   for own gameId, subscription of App.gameSubscriptions
     if +gameId not in gameIds
       subscription.unsubscribe()
       delete App.gameSubscriptions[gameId]
 
-# Subscribe to visible games not yet subscribed to
-App.subscribeToNewGames = ($games) ->
-  for game in $games
-    $game = $(game)
-    gameId = $game.data("id")
-    if gameId not of App.gameSubscriptions
-      App.subscribe $game
+# Subscribe to updates for games present on page
+App.subscribeToNewGames = (gameIds) ->
+  App.subscribeToGame id for id in gameIds when id not of App.gameSubscriptions
 
-# Subscribe to game
-App.subscribe = ($game) ->
-  gameId = $game.data("id")
+# Subscribe to updates for game with given id
+App.subscribeToGame = (gameId) ->
   App.gameSubscriptions[gameId] = App.cable.subscriptions.create {
                                                           channel: "GameChannel"
                                                           id: gameId
@@ -42,7 +36,7 @@ App.subscribe = ($game) ->
           if data.latestPlay
             App.Game.addPlay gameId, data.latestPlay
             $(".whose_turn[data-game-id='#{ gameId }']").text "Your turn"
-            $game.addClass "playable"
+            $(".game[data-id='#{ gameId }']").addClass "playable"
           else
             Turbolinks.visit(window.location)
         $("#play_number").val(data.latestPlay.number + 1) if data.latestPlay

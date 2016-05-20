@@ -42,6 +42,24 @@ module GamesHelper
     player.id == user_session.current_user.id ? 'Your turn' : "#{ player.handle }'s turn"
   end
   
+  def game_status_text(game)
+    user_id = user_session.current_user.id
+    case game.status
+    when Game::P1_WON
+      user_id == game.player1_id ? 'You won!' : 'You lost'
+    when Game::P2_WON
+      user_id == game.player2_id ? 'You won!' : 'You lost'
+    when Game::DRAW
+      'Draw'
+    when Game::P1_FORFEIT
+      user_id == game.player1_id ? 'You resigned' : "#{ game.player2.handle } resigned"
+    when Game::P2_FORFEIT
+      user_id == game.player2_id ? 'You resigned' : "#{ game.player1.handle } resigned"
+    else
+      nil
+    end
+  end
+  
   # Return appropriate text to indicate whether current user won, lost,
   # or drew completed game."
   def game_result(completed_game)

@@ -1,4 +1,6 @@
 class GameChannel < ApplicationCable::Channel
+  include ActionView::Helpers::DateHelper
+  
   def subscribed
     game = Game.find(params[:id])
     stream_for game
@@ -12,8 +14,9 @@ class GameChannel < ApplicationCable::Channel
     play = game.make_play(p['number'], p['x'], p['y'])
     
     broadcast = {
-      user_id: current_user.id,
+      userId: current_user.id,
       status: game.status,
+      lastActivity: "Last activity #{ time_ago_in_words(game.updated_at) } ago",
       latestPlay: {
         x: play.x,
         y: play.y,

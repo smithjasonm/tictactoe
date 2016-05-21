@@ -1,5 +1,5 @@
 class Play < ApplicationRecord
-  belongs_to :game, inverse_of: :plays
+  belongs_to :game, inverse_of: :plays, touch: true
   
   validates :x, :y, numericality: { only_integer: true, greater_than_or_equal_to: 0,
                                     less_than_or_equal_to: 2 }

@@ -2,19 +2,25 @@ window.App || (window.App = {})
 App.gameSubscriptions = {}
 
 $(document).on "turbolinks:load", ->
-  gameIds = for game in $(".game")
+  
+  # Collect IDs of pending games on current page.
+  gameIds = for game in $(".game[data-status='0']")
     $(game).data("id")
+  
+  # Unsubscribe from updates for games absent from page.
 #  App.unsubscribeFromOldGames(gameIds)
+  
+  # Subscribe to updates for pending games present on page.
   App.subscribeToNewGames(gameIds)
 
-# Unsubscribe from updates for games absent from page.
+# Unsubscribe from updates for games with given IDs.
 # App.unsubscribeFromOldGames = (gameIds) ->
 #   for own gameId, subscription of App.gameSubscriptions
 #     if +gameId not in gameIds
 #       subscription.unsubscribe()
 #       delete App.gameSubscriptions[gameId]
 
-# Subscribe to updates for games present on page whose updates are not yet subscribed to.
+# Subscribe to updates for games with given IDs whose updates are not yet subscribed to.
 App.subscribeToNewGames = (gameIds) ->
   App.subscribeToGame id for id in gameIds when id not of App.gameSubscriptions
 

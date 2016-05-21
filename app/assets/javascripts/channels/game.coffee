@@ -28,6 +28,7 @@ App.subscribeToGame = (gameId) ->
       @perform "make_play", data
     
     received: (data) ->
+      Turbolinks.clearCache()
       @updateGame data
     
     updateGame: (data) ->

@@ -4,21 +4,21 @@ App.gameSubscriptions = {}
 $(document).on "turbolinks:load", ->
   gameIds = for game in $(".game")
     $(game).data("id")
-  App.unsubscribeFromOldGames(gameIds)
+#  App.unsubscribeFromOldGames(gameIds)
   App.subscribeToNewGames(gameIds)
 
-# Unsubscribe from updates for games absent from page
-App.unsubscribeFromOldGames = (gameIds) ->
-  for own gameId, subscription of App.gameSubscriptions
-    if +gameId not in gameIds
-      subscription.unsubscribe()
-      delete App.gameSubscriptions[gameId]
+# Unsubscribe from updates for games absent from page.
+# App.unsubscribeFromOldGames = (gameIds) ->
+#   for own gameId, subscription of App.gameSubscriptions
+#     if +gameId not in gameIds
+#       subscription.unsubscribe()
+#       delete App.gameSubscriptions[gameId]
 
-# Subscribe to updates for games present on page
+# Subscribe to updates for games present on page whose updates are not yet subscribed to.
 App.subscribeToNewGames = (gameIds) ->
   App.subscribeToGame id for id in gameIds when id not of App.gameSubscriptions
 
-# Subscribe to updates for game with given id
+# Subscribe to updates for game with given id.
 App.subscribeToGame = (gameId) ->
   App.gameSubscriptions[gameId] = App.cable.subscriptions.create {
                                                           channel: "GameChannel"

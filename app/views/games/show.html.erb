@@ -11,7 +11,7 @@
         <%= whose_turn(@game) %>
       </p>
       <p class="game-status"><%= game_status_text(@game) %></p>
-      <%= quit_or_new_game_form(@game, @new_game) %>
+      <%= quit_or_new_game_button(@game, @new_game) %>
       <%= link_to "Back to games", games_path, class: 'btn btn-link' %>
     </div>
   </div>

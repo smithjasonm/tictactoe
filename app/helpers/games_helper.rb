@@ -80,9 +80,9 @@ module GamesHelper
     handle1 + ' vs. ' + handle2
   end
   
-  # Render form to enable user to delete or resign from pending game or start a new one
+  # Render button to enable user to delete or resign from pending game or start a new one
   # if the current game is over.
-  def quit_or_new_game_form(game, new_game)
+  def quit_or_new_game_button(game, new_game)
     if game.pending?
       locals = { game: game }
       if game.player2_id.nil?
@@ -91,7 +91,13 @@ module GamesHelper
         render partial: 'games/resign_game_form', locals: locals
       end
     elsif user_session.current_user.waiting_game.nil?
-      render partial: 'games/new_game_form', locals: { game: new_game }
+      <<-RESULT.html_safe
+        <p>
+          <button class="play-again btn btn-default" style="display: none">
+            Play again
+          </button>
+        </p>
+      RESULT
     end
   end
   

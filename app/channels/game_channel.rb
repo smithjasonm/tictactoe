@@ -46,13 +46,10 @@ class GameChannel < ApplicationCable::Channel
   end
   
   # Accept a request to play another game; if the expiration time has passed, however,
-  # reject the request. Include in the message of acceptance the location of the new game.
+  # do nothing. Include in the message of acceptance the location of the new game.
   def confirm_play_again(data)
     expires = Time.at(data['expires'])
-    if expires < Time.now
-      reject_play_again
-      return
-    end
+    return if expires < Time.now
     game = Game.find(params[:id])
     user_id = data['user_id']
     new_game = Game.create player1_id: game.player1_id, player2_id: game.player2_id
@@ -65,5 +62,19 @@ class GameChannel < ApplicationCable::Channel
     game = Game.find(params[:id])
     user_id = data['user_id']
     GameChannel.broadcast_to game, action: 'reject_play_again', user_id: user_id
+  end
+  
+  # Indicate that user invited to play another game is no longer on game page and
+  # hence cannot accept or reject the invitation.
+  def cannot_play_again(data)
+    game = Game.find(params[:id])
+    user_id = data['user_id']
+    GameChannel.broadcast_to game, action: 'cannot_play_again', user_id: user_id
+  end
+  
+  # Cancel request to play another game.
+  def cancel_play_again
+    game = Game.find(params[:id])
+    GameChannel.broadcast_to game, action: 'cancel_play_again', user_id: current_user.id
   end
 end

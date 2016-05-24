@@ -67,7 +67,7 @@ App.subscribeToGame = (gameId) ->
       
       # If user is no longer on game page, send message of unavailability and return.
       if $(".game[data-id='#{ gameId }']").length == 0
-        @perform "cannot_play_again", user_id: App.User.id
+        @perform "cannot_play_again"
         return
       
       # Track the time to expiration of the invitation to play again, and if the timer
@@ -96,7 +96,7 @@ App.subscribeToGame = (gameId) ->
       # pending, clear the timeout and send a message of unavailability.
       $(document).one "turbolinks:load.playAgain", =>
         clearTimeout @playAgainTimeout
-        @perform "cannot_play_again", user_id: App.User.id
+        @perform "cannot_play_again"
       
       # When the user clicks to accept or reject the invitation to play another game,
       # clear the timeout and remove the relevant click and page-load handlers.
@@ -108,12 +108,12 @@ App.subscribeToGame = (gameId) ->
       # Handle user's acceptance of the invitation to play another game by sending
       # a confirmation message.
       $("#confirm-play-again").click =>
-        @perform "confirm_play_again", user_id: App.User.id, expires: data.expires
+        @perform "confirm_play_again", expires: data.expires
       
       # Handle user's rejection of the invitation to play another game by sending
       # a rejection message.
       $("#reject-play-again").click =>
-        @perform "reject_play_again", user_id: App.User.id
+        @perform "reject_play_again"
     
     # Handle notification of acceptance of the invitation to play another game by
     # navigating to the new game's address included with the notification.
@@ -158,7 +158,7 @@ $(document).on "click", ".play-again", (event) ->
       <p>Awaiting response from opponent...</p>
       <p><button id="cancel-play-again" class="btn btn-default">Cancel</button></p>
     </section>'
-  App.gameSubscriptions[gameId].perform "request_play_again", user_id: App.User.id
+  App.gameSubscriptions[gameId].perform "request_play_again"
   $(document).one "turbolinks:visit.playAgain", ->
     App.gameSubscriptions[gameId].perform "cancel_play_again"
   $("#cancel-play-again").click ->

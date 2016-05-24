@@ -38,10 +38,9 @@ class GameChannel < ApplicationCable::Channel
   
   # Request to play another game. Include a time of expiration of the request
   # to prevent unreasonable delays.
-  def request_play_again(data)
+  def request_play_again
     game = Game.find(params[:id])
-    user_id = data['user_id']
-    GameChannel.broadcast_to game, user_id: user_id, action: 'request_play_again',
+    GameChannel.broadcast_to game, user_id: current_user.id, action: 'request_play_again',
                                    expires: Time.now.to_i + 60
   end
   
@@ -50,29 +49,27 @@ class GameChannel < ApplicationCable::Channel
   def confirm_play_again(data)
     expires = Time.at(data['expires'])
     return if expires < Time.now
+    
     game = Game.find(params[:id])
-    user_id = data['user_id']
     new_game = Game.create player1_id: game.player1_id, player2_id: game.player2_id
-    GameChannel.broadcast_to game, action: 'confirm_play_again', user_id: user_id,
+    GameChannel.broadcast_to game, action: 'confirm_play_again', user_id: current_user.id,
                                  location: game_path(new_game)
   end
   
   # Reject a request to play another game.
-  def reject_play_again(data)
+  def reject_play_again
     game = Game.find(params[:id])
-    user_id = data['user_id']
-    GameChannel.broadcast_to game, action: 'reject_play_again', user_id: user_id
+    GameChannel.broadcast_to game, action: 'reject_play_again', user_id: current_user.id
   end
   
-  # Indicate that user invited to play another game is no longer on game page and
+  # Indicate that the user invited to play another game is no longer on the game page and
   # hence cannot accept or reject the invitation.
-  def cannot_play_again(data)
+  def cannot_play_again
     game = Game.find(params[:id])
-    user_id = data['user_id']
-    GameChannel.broadcast_to game, action: 'cannot_play_again', user_id: user_id
+    GameChannel.broadcast_to game, action: 'cannot_play_again', user_id: current_user.id
   end
   
-  # Cancel request to play another game.
+  # Cancel a request to play another game.
   def cancel_play_again
     game = Game.find(params[:id])
     GameChannel.broadcast_to game, action: 'cancel_play_again', user_id: current_user.id

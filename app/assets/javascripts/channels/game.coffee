@@ -94,7 +94,7 @@ App.subscribeToGame = (gameId) ->
       
       # If the user navigates to a different page while an invitation to play again is
       # pending, clear the timeout and send a message of unavailability.
-      $(document).one "turbolinks:load.playAgain", =>
+      $(document).one "turbolinks:visit.playAgain", =>
         clearTimeout @playAgainTimeout
         @perform "cannot_play_again"
       
@@ -103,7 +103,7 @@ App.subscribeToGame = (gameId) ->
       $(".decide-play-again").click =>
         clearTimeout @playAgainTimeout
         $(".decide-play-again").off "click"
-        $(document).off "turbolinks:load.playAgain"
+        $(document).off "turbolinks:visit.playAgain"
       
       # Handle user's acceptance of the invitation to play another game by sending
       # a confirmation message.
@@ -144,7 +144,7 @@ App.subscribeToGame = (gameId) ->
     cancelPlayAgain: (data) ->
       return if data.user_id == App.User.id
       clearTimeout @playAgainTimeout
-      $(document).off "turbolinks:load.playAgain"
+      $(document).off "turbolinks:visit.playAgain"
       $("#play-again-request").text "Your opponent canceled the invitation to play again."
 
 # Send a request to play another game if the user clicks the play-again button,

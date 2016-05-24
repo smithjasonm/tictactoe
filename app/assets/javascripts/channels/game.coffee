@@ -29,30 +29,26 @@ App.subscribeToGame = (gameId) ->
                                                           channel: "GameChannel"
                                                           id: gameId
                                                         },
-    make_play: (data) ->
-      @perform "make_play", data
-    
+    # Handle receipt of messages from server.
     received: (data) ->
       switch data.action
-        when 'make_play'
-          Turbolinks.clearCache()
-          @updateGame data
+        when 'make_play' then @makePlay data
+        when 'update_game' then Turbolinks.visit window.location
         when 'request_play_again' then @requestPlayAgain data
         when 'confirm_play_again' then @confirmPlayAgain data
         when 'reject_play_again' then @rejectPlayAgain data
         when 'cannot_play_again' then @cannotPlayAgain data
         when 'cancel_play_again' then @cancelPlayAgain data
     
-    updateGame: (data) ->
+    # Respond to a message that a play has been made.
+    makePlay: (data) ->
+      Turbolinks.clearCache()
       if data.status == 0 # Game is still pending
-        if data.userId != App.User.id
-          if data.latestPlay
-            App.Game.addPlay gameId, data.latestPlay
-            $(".whose-turn[data-game-id='#{ gameId }']").text "Your turn"
-            $(".last-game-activity[data-game-id='#{ gameId }']").text data.lastActivity
-            $(".game[data-id='#{ gameId }']").addClass "playable"
-          else
-            Turbolinks.visit(window.location)
+        unless data.userId == App.User.id
+          App.Game.addPlay gameId, data.latestPlay
+          $(".whose-turn[data-game-id='#{ gameId }']").text "Your turn"
+          $(".last-game-activity[data-game-id='#{ gameId }']").text data.lastActivity
+          $(".game[data-id='#{ gameId }']").addClass "playable"
         $("#play_number").val(data.latestPlay.number + 1) if data.latestPlay
       else # Game is now over
         

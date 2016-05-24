@@ -101,7 +101,7 @@ class GamesController < ApplicationController
       return
     end
     GameChannel.broadcast_to @game, user_id: user_id, status: @game.status,
-                                                      action: "game update"
+                                                      action: 'update_game'
     respond_to do |format|
       format.html { redirect_to @game }
       format.json { render :show, status: :ok, location: @game }

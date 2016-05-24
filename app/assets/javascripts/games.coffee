@@ -42,4 +42,4 @@ $(document).on "click", ".game.playable .position.empty", (event) ->
       y: position.y
       number: +$("#play_number").val()
   
-  App.gameSubscriptions[gameId].make_play data
+  App.gameSubscriptions[gameId].perform "make_play", data

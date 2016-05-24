@@ -44,7 +44,11 @@ App.subscribeToGame = (gameId) ->
     makePlay: (data) ->
       Turbolinks.clearCache()
       if data.status == 0 # Game is still pending
-        unless data.userId == App.User.id
+        if data.userId == App.User.id
+          $game = $(".game[data-id='#{ gameId }']")
+          opponent_handle = $game.data("opponent-handle")
+          $(".whose-turn[data-game-id='#{ gameId }']").text "#{ opponent_handle }'s turn"
+        else
           App.Game.addPlay gameId, data.latestPlay
           $(".whose-turn[data-game-id='#{ gameId }']").text "Your turn"
           $(".last-game-activity[data-game-id='#{ gameId }']").text data.lastActivity

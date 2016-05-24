@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .game {
-  margin: 20px 0;
+  margin: 20px auto;
   border-collapse: collapse;
   td {
     width: 100px;
@@ -28,9 +28,6 @@
 
 .game-col {
   text-align: center;
-  .game-container {
-    display: inline-block;
-  }
 }
 
 .game-preview .game {

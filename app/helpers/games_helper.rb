@@ -90,7 +90,7 @@ module GamesHelper
       else
         render partial: 'games/resign_game_form', locals: locals
       end
-    elsif user_session.current_user.waiting_game.nil?
+    else
       <<-RESULT.html_safe
         <p>
           <button class="play-again btn btn-default" style="display: none">

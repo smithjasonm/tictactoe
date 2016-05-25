@@ -55,7 +55,17 @@ class GamesController < ApplicationController
     
     respond_to do |format|
       if @game.save
-        ActionCable.server.broadcast 'waiting_games', user_id: user.id
+        # Broadcast message to clients directing them to update their lists
+        # of waiting games, using the html included. Use a new user as a dummy
+        # for the nested join_game_form partial, which requires the potential joining
+        # user's ID, as the actual value will be set by the client.
+        waiting_game_html = render_to_string partial: 'waiting_game', object: @game,
+                                              locals: { user: User.new }
+        ActionCable.server.broadcast 'waiting_games', action: 'add_game',
+                                                     user_id: user.id,
+                                                     game_id: @game.id,
+                                                        html: waiting_game_html
+        
         format.html { redirect_to @game }
         format.json { render :show, status: :created, location: @game }
       else
@@ -95,13 +105,22 @@ class GamesController < ApplicationController
         return
       end
       @game.update!(player2_id: player2_id)
-      ActionCable.server.broadcast 'waiting_games', user_id: user_id
+      
+      # Broadcast message to clients directing them to update their lists
+      # of waiting games.
+      ActionCable.server.broadcast 'waiting_games', action: 'remove_game',
+                                                   user_id: user_id,
+                                                   game_id: @game.id
     else
       head :bad_request
       return
     end
+    
+    # Broadcast message to clients directing them to update their lists
+    # of waiting games.
     GameChannel.broadcast_to @game, user_id: user_id, status: @game.status,
                                                       action: 'update_game'
+    
     respond_to do |format|
       format.html { redirect_to @game }
       format.json { render :show, status: :ok, location: @game }
@@ -117,7 +136,13 @@ class GamesController < ApplicationController
       return
     end
     @game.destroy
-    ActionCable.server.broadcast 'waiting_games', user_id: user_id
+    
+    # Broadcast message to clients directing them to update their lists
+    # of waiting games.
+    ActionCable.server.broadcast 'waiting_games', action: 'remove_game',
+                                                 user_id: user_id,
+                                                 game_id: @game.id
+    
     respond_to do |format|
       format.html { redirect_to games_url }
       format.json { head :no_content }

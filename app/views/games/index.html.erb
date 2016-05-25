@@ -16,16 +16,18 @@
       <%= render partial: 'ongoing_game', collection: @ongoing_games %>
     </div>
   </div>
-  <div class="waiting-games col-sm-3 col-sm-pull-6">
+  <div class="col-sm-3 col-sm-pull-6">
     <h2>Waiting games</h2>
     <% if @user_waiting_game -%>
       <%= render partial: 'user_waiting_game', object: @user_waiting_game %>
     <% end -%>
-    <%= render partial: 'waiting_game', collection: @waiting_games,
-                                            locals: { user: @user } %>
-    <% if @user_waiting_game.nil? && @waiting_games.empty? %>
-      <p>No waiting games</p>
-    <% end %>
+    <section id="waiting-games">
+      <%= render partial: 'waiting_game', collection: @waiting_games,
+                                              locals: { user: @user } %>
+      <% if @user_waiting_game.nil? && @waiting_games.empty? %>
+        <p id="no-waiting-games">No waiting games</p>
+      <% end %>
+    </section>
     <% if @user.waiting_game.nil? -%>
       <%= render partial: 'new_game_form', locals: { game: @new_game } %>
     <% end -%>

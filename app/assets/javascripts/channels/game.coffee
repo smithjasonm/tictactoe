@@ -116,9 +116,12 @@ App.subscribeToGame = (gameId) ->
         @perform "reject_play_again"
     
     # Handle notification of acceptance of the invitation to play another game by
-    # navigating to the new game's address included with the notification.
+    # navigating to the new game's address included with the notification. Also,
+    # remove turbolinks:visit handler to avoid canceling play-again request,
+    # and clear Turbolinks cache.
     confirmPlayAgain: (data) ->
       $(document).off "turbolinks:visit.playAgain" unless data.user_id == App.User.id
+      $(document).one "turbolinks:load.playAgain", -> Turbolinks.clearCache()
       Turbolinks.visit data.location
     
     # Handle notification of rejection of the invitation to play another game, indicating

@@ -12,6 +12,8 @@
     color: blue;
     font-size: 75px;
     line-height: 1;
+    cursor: default;
+    user-select: none;
   }
   td:not(:last-child) {
     border-right: 2px solid green;

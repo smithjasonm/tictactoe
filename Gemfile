@@ -35,6 +35,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap_form', '~> 2.3.0'
 gem 'puma'
+gem 'autoprefixer-rails', '~> 6.3.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

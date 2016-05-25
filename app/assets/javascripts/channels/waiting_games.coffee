@@ -22,7 +22,7 @@ App.waiting_games = App.cable.subscriptions.create "WaitingGamesChannel",
       when 'add_game'
         $("#no-waiting-games").remove()
         $waiting_games.prepend data.html
-        $("#waiting-game-#{data.game_id} input[name='game[player2_id]']").val App.User.id
+        $("#game_#{data.game_id}_player2_id").val App.User.id
       
       # Remove a game from the list of waiting games. If, after its removal, no more
       # waiting games remain, insert text indicating so.

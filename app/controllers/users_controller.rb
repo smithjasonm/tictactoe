@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     current_user = user_session.current_user
-    @pair_record = @user.game_record(current_user) unless @user.id == current_user.id
+    @pair_record = current_user.game_record(@user) unless @user.id == current_user.id
     @full_record = @user.game_record
   end
 

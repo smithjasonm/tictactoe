@@ -12,5 +12,7 @@ Rails.application.routes.draw do
     resources :plays, only: [:index, :create] #, format: 'json'
   end
   
-  resources :users
+  resources :users do
+    get 'search', on: :collection
+  end
 end

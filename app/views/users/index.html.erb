@@ -1,29 +1,19 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title do -%>
+  User Lookup
+<% end -%>
 
-<h1>Listing Users</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Handle</th>
-      <th>Email</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.handle %></td>
-        <td><%= user.email %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-4">
+    <h2>User lookup</h2>
+    <%= bootstrap_form_tag url: search_users_path, method: :get do |f| %>
+      <%= f.search_field :query, id: 'user-query', label: "Username or email address",
+                                               autofocus: true %>
+      <%= f.form_group do %>
+        <%= f.submit 'Submit' %>
+      <% end %>
+      <% if @user_not_found -%>
+        <p class="text-danger">User not found</p>
+      <% end -%>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New User', new_user_path %>
+  </div>
+</div>

@@ -79,6 +79,29 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  # GET /users/search
+  # GET /users/search.json
+  def search
+    query = params[:query]
+    if query.include? '@'
+      @user = User.find_by 'LOWER(email) = LOWER(?)', query
+    else
+      @user = User.find_by 'LOWER(handle) = LOWER(?)', query
+    end
+    respond_to do |format|
+      if @user
+        format.html { redirect_to @user }
+        format.json { render :show }
+      else
+        format.html do
+          @user_not_found = true
+          render :index
+        end
+        format.json { head :not_found }
+      end
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

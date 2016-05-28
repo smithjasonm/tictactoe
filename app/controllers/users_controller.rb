@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_user, only: [:edit, :update, :destroy]
   skip_before_action :require_login, only: [:new, :create]
 
   # GET /users
@@ -49,6 +50,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    
     respond_to do |format|
       if @user.update(user_params)
         format.any(:html, :js) do
@@ -110,5 +112,10 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:handle, :email, :password, :password_confirmation)
+    end
+    
+    # Allow access only to the current user.
+    def authorize_user
+      head :forbidden unless @user.id == user_session.current_user.id
     end
 end

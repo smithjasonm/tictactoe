@@ -8,10 +8,4 @@ class StaticPagesController < ApplicationController
       render layout: 'cover'
     end
   end
-
-  def help
-  end
-
-  def about
-  end
 end

@@ -11,11 +11,6 @@ class GamesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:games)
   end
 
-  test "should get new" do
-    get :new
-    assert_response :success
-  end
-
   test "should create game" do
     assert_difference('Game.count') do
       post :create, game: { player1_id: @game.player1, player2_id: @game.player2, status: @game.status }
@@ -26,11 +21,6 @@ class GamesControllerTest < ActionController::TestCase
 
   test "should show game" do
     get :show, id: @game
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get :edit, id: @game
     assert_response :success
   end
 

@@ -32,15 +32,6 @@ class GamesController < ApplicationController
     @pair_record = user.game_record(@opponent) if @opponent
   end
 
-  # GET /games/new
-  def new
-    @game = Game.new
-  end
-
-  # GET /games/1/edit
-  def edit
-  end
-
   # POST /games
   # POST /games.json
   def create

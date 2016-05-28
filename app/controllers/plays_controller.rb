@@ -1,13 +1,14 @@
+# This controller is not used at present, as plays are now made through Action Cable.
+# Because it may be used in the future, however, it has not been removed.
 class PlaysController < ApplicationController
-  include ActionView::Helpers::JavaScriptHelper
   
   # GET /games/1/plays.json
-  def index
-    @plays = Game.find(params[:game_id]).plays
-  end
+#  def index
+#    @plays = Game.find(params[:game_id]).plays
+#  end
 
   # POST /games/1/plays.json
-  def create
+#  def create
 #     @game = Game.find(params[:game_id])
 #     unless @game.pending? && @game.player2_id.present? &&
 #                             user_session.current_user.id == @game.whose_turn.id
@@ -42,7 +43,7 @@ class PlaysController < ApplicationController
 #         format.json { render json: invalid.record.errors, status: :unprocessable_entity }
 #       end
 #     end
-  end
+#  end
 
   private
   

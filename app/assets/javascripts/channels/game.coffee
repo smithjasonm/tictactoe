@@ -44,16 +44,16 @@ App.subscribeToGame = (gameId) ->
     makePlay: (data) ->
       Turbolinks.clearCache()
       if data.status == 0 # Game is still pending
+        $game = $(".game[data-id='#{ gameId }']")
         if data.userId == App.User.id
-          $game = $(".game[data-id='#{ gameId }']")
           opponent_handle = $game.data("opponent-handle")
           $(".whose-turn[data-game-id='#{ gameId }']").text "#{ opponent_handle }'s turn"
         else
           App.Game.addPlay gameId, data.latestPlay
           $(".whose-turn[data-game-id='#{ gameId }']").text "Your turn"
           $(".last-game-activity[data-game-id='#{ gameId }']").text data.lastActivity
-          $(".game[data-id='#{ gameId }']").addClass "playable"
-        $("#play_number").val(data.latestPlay.number + 1) if data.latestPlay
+          $game.addClass "playable"
+        $game.data "next-play-number", data.latestPlay.number + 1
       else # Game is now over
         
         # Reload the page and also show the play-again button, which is hidden by default.

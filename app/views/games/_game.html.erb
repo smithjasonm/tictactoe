@@ -1,5 +1,6 @@
 <%= content_tag :table, class: game_class(game), data: { id: game.id, status: game.status,
-                                            opponent_handle: opponent_handle(game) } do %>
+                                            opponent_handle: opponent_handle(game),
+                                           next_play_number: @next_play_number } do %>
   <% 3.times do |row| -%>
     <tr>
       <% 3.times do |col| -%>

@@ -18,25 +18,26 @@ $(document).on "click", ".game.playable .position.empty", (event) ->
   position = $this.data()
   $game = $this.closest(".game")
   gameId = $game.data("id")
+  nextPlayNumber = $game.data("next-play-number")
   
   play =
     x: position.x
     y: position.y
-    player: if $("#play_number").val() % 2 == 1 then 1 else 2
+    player: if nextPlayNumber % 2 == 1 then 1 else 2
   
   App.Game.addPlay gameId, play
   
   $game.removeClass "playable"
   
-  # $("#play_x").val position.x
-  # $("#play_y").val position.y
-  # $("#new_play").submit()
+#   $("#play_x").val position.x
+#   $("#play_y").val position.y
+#   $("#new_play").submit()
   
   data =
     id: gameId
     play:
       x: position.x
       y: position.y
-      number: +$("#play_number").val()
+      number: nextPlayNumber
   
   App.gameSubscriptions[gameId].perform "make_play", data

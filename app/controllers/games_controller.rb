@@ -22,8 +22,7 @@ class GamesController < ApplicationController
       return
     end
     if @game.pending?
-      @next_play = Play.new
-      @next_play.number = @game.next_play_number
+      @next_play_number = @game.next_play_number
       @new_game = nil
     else
       @new_game = Game.new(player1_id: user_id)

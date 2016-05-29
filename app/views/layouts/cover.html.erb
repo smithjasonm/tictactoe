@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Tic-Tac-Toe</title>
+    <title>
+      <% if content_for?(:title) -%>
+        <%= yield :title %> |
+      <% end -%>
+      Tic-Tac-Toe
+    </title>
     <%= render 'layouts/head' %>
   </head>
   <body>

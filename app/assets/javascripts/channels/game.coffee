@@ -2,6 +2,9 @@ window.App || (window.App = {})
 App.gameSubscriptions = {}
 
 $(document).on "turbolinks:load", ->
+  # Proceed only if there is an Action Cable consumer.
+  return unless App.cable?
+  
   # Collect IDs of pending games on current page.
   gameIds = for game in $(".game[data-status='0']")
     $(game).data("id")
@@ -29,6 +32,12 @@ App.subscribeToGame = (gameId) ->
                                                           channel: "GameChannel"
                                                           id: gameId
                                                         },
+    # On permanent disconnection from server, clear all subscriptions.
+    disconnected: (options) ->
+      unless options.willAttemptReconnect
+        subscription.unsubscribe() for subscription in App.gameSubscriptions
+        App.gameSubscriptions = {}
+    
     # Handle receipt of messages from server.
     received: (data) ->
       switch data.action

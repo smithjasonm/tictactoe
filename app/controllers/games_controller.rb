@@ -68,9 +68,21 @@ class GamesController < ApplicationController
   # PATCH/PUT /games/1
   # PATCH/PUT /games/1.json
   def update
+    # Allow updates only of pending games
+    if @game.completed?
+      head :forbidden
+      return
+    end
+    
     user_id = user_session.current_user.id
     game_params = params.require(:game).permit(:player2_id, :status)
     if game_params[:status]
+      # Allow status updates only of ongoing games
+      unless @game.ongoing?
+        head :forbidden
+        return
+      end
+      
       case game_params[:status].to_i
       when Game::P1_FORFEIT
         unless user_id == @game.player1.id

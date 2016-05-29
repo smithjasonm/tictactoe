@@ -176,10 +176,10 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     log_in_as @user
     waiting_game = games(:waiting_game)
     
-    patch game_url(@game), params: { game: { status: Game::P1_FORFEIT } }
-    @game.reload
+    patch game_url(waiting_game), params: { game: { status: Game::P1_FORFEIT } }
+    waiting_game.reload
     
-    assert_equal Game::PENDING, @game.status
+    assert_equal Game::PENDING, waiting_game.status
     assert_response :forbidden
   end
   
@@ -187,10 +187,10 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     log_in_as users(:two)
     forfeited_game = games(:forfeited_game)
     
-    patch game_url(@game), params: { game: { status: Game::P2_FORFEIT } }
+    patch game_url(forfeited_game), params: { game: { status: Game::P2_FORFEIT } }
     @game.reload
     
-    assert_equal Game::P1_FORFEIT, @game.status
+    assert_equal Game::P1_FORFEIT, forfeited_game.status
     assert_response :forbidden
   end
   

@@ -3,7 +3,13 @@ require 'test_helper'
 class UserSessionTest < ActiveSupport::TestCase
   def setup
     @session = {}
-    @user_session = UserSession.new(@session)
+    @cookies = {}
+    
+    def @cookies.signed
+      self
+    end
+    
+    @user_session = UserSession.new(@session, @cookies)
     @user = users(:one)
   end
   
@@ -16,12 +22,14 @@ class UserSessionTest < ActiveSupport::TestCase
   test "should log user in" do
     @user_session.log_in @user
     assert_equal @user.id, @session[:user_id]
+    assert_equal @user.id, @cookies[:user_id]
   end
   
   test "should log user out" do
     @user_session.log_in @user
     @user_session.log_out
     assert_nil @session[:user_id]
+    assert_nil @cookies[:user_id]
   end
   
   test "should get current user" do
@@ -35,7 +43,7 @@ class UserSessionTest < ActiveSupport::TestCase
     @user_session.log_in @user
     assert_equal @user, @user_session.current_user
     @user_session.log_out
-    @user_session = UserSession.new(user_id: @user.id)
+    @user_session = UserSession.new({ user_id: @user.id }, { user_id: @user.id })
     current_user = @user_session.current_user
     assert_equal current_user, @user_session.current_user
   end

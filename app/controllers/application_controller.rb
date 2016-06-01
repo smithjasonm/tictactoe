@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   helper_method :user_session
   
   def user_session
-    @user_session ||= UserSession.new(session)
+    @user_session ||= UserSession.new(session, cookies)
   end
   
   private

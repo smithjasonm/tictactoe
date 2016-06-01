@@ -28,14 +28,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create user" do
-    assert_difference('User.count') do
-      post users_path, params: { user: { email: "newuser@example.com",
-                                        handle: "newuser",
-                                      password: 'secret',
-                         password_confirmation: 'secret' } }
-    end
-
+    assert_difference('User.count') { create_user }
     assert_redirected_to user_path(User.last)
+  end
+  
+  test "should log in after creating user" do
+    create_user
+    user_id = User.last.id
+    assert_equal user_id, session[:user_id]
+    assert_equal user_id, @request.cookie_jar.signed[:user_id]
   end
 
   test "should show self if logged in" do
@@ -115,5 +116,14 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference('User.count') { delete user_url(@user) }
     assert_redirected_to login_path
   end
+  
+  private
+  
+    def create_user
+      post users_path, params: { user: { email: "newuser@example.com",
+                                        handle: "newuser",
+                                      password: 'secret',
+                         password_confirmation: 'secret' } }
+    end
   
 end

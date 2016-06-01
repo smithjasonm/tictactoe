@@ -11,7 +11,6 @@ class SessionsController < ApplicationController
     user = User.where('lower(email) = ?', params[:email].downcase).take
     if user.try(:authenticate, params[:password])
       user_session.log_in user
-      cookies.signed[:user_id] = user.id # Used for Action Cable (and possibly routing)
       redirect_to games_url
     else
       flash.now[:danger] = "No user was found with that email address and password."
@@ -21,7 +20,6 @@ class SessionsController < ApplicationController
   
   def destroy
     user_session.log_out
-    cookies.delete :user_id
     redirect_to root_url
   end
 end

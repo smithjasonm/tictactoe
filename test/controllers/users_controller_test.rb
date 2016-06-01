@@ -32,6 +32,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to user_path(User.last)
   end
   
+  test "should render errors creating user" do
+    post users_path, params: { user: { email: "bademail",
+                                      handle: "invalid_user",
+                                    password: 'secret',
+                       password_confirmation: 'secret' } }
+    
+    assert_equal users_path, @request.path
+    assert_select ".has-error"
+  end
+  
   test "should log in after creating user" do
     create_user
     user_id = User.last.id
@@ -80,6 +90,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
                                           password: 'secret',
                              password_confirmation: 'secret' } }
     assert_redirected_to user_path(@user)
+  end
+  
+  test "should render errors updating user" do
+    log_in_as @user
+    patch user_url(@user), params: { user: { password: 'password',
+                                password_confirmation: 'password-mismatch' } }
+    
+    assert_equal user_path(@user), @request.path
+    assert_select ".has-error"
   end
   
   test "should not update other user if logged in" do

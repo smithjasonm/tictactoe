@@ -43,25 +43,22 @@ class GamesController < ApplicationController
       return
     end
     
+    @game.save!
+    
+    # Broadcast message to clients directing them to update their lists
+    # of waiting games, using the html included. Use a new user as a dummy
+    # for the nested join_game_form partial, which requires the potential joining
+    # user's ID, as the actual value will be set by the client.
+    waiting_game_html = render_to_string partial: 'waiting_game', object: @game,
+                                          locals: { user: User.new }
+    ActionCable.server.broadcast 'waiting_games', action: 'add_game',
+                                                 user_id: user.id,
+                                                 game_id: @game.id,
+                                                    html: waiting_game_html
+    
     respond_to do |format|
-      if @game.save
-        # Broadcast message to clients directing them to update their lists
-        # of waiting games, using the html included. Use a new user as a dummy
-        # for the nested join_game_form partial, which requires the potential joining
-        # user's ID, as the actual value will be set by the client.
-        waiting_game_html = render_to_string partial: 'waiting_game', object: @game,
-                                              locals: { user: User.new }
-        ActionCable.server.broadcast 'waiting_games', action: 'add_game',
-                                                     user_id: user.id,
-                                                     game_id: @game.id,
-                                                        html: waiting_game_html
-        
-        format.html { redirect_to @game }
-        format.json { render :show, status: :created, location: @game }
-      else
-        format.html { render :new }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to @game }
+      format.json { render :show, status: :created, location: @game }
     end
   end
 

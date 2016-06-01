@@ -24,7 +24,7 @@ module UsersHelper
   
     # Get URL of Gravatar of given size for given email address.
     def avatar_url(email, size)
-      "http://www.gravatar.com/avatar/#{ email_hash(email) }?s=#{ size }"
+      "https://www.gravatar.com/avatar/#{ email_hash(email) }?s=#{ size }"
     end
     
     # Get hash of given email address for use in Gravatar URL.

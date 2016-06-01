@@ -4,6 +4,9 @@ $(document).on "turbolinks:load", ->
   # Proceed only if there is an Action Cable consumer.
   return unless App.cable?
   
+  # Proceed only if a waiting-games subscription does not already exist
+  return if App.waiting_games
+  
   App.waiting_games = App.cable.subscriptions.create "WaitingGamesChannel",
     # On disconnection from server, remove subscription.
     disconnected: (options) ->

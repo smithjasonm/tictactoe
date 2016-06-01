@@ -106,6 +106,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
   
+  test "should log out after destroy" do
+    log_in_as @user
+    delete user_url(@user)
+    assert_nil session[:user_id]
+    assert_nil cookies[:user_id]
+  end
+  
   test "should not destroy other user if logged in" do
     log_in_as @user
     assert_no_difference('User.count') { delete user_url(users(:two)) }

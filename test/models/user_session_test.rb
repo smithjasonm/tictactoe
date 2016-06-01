@@ -22,7 +22,14 @@ class UserSessionTest < ActiveSupport::TestCase
   test "should log user in" do
     @user_session.log_in @user
     assert_equal @user.id, @session[:user_id]
-    assert_equal @user.id, @cookies[:user_id]
+    assert_equal @user.id, @cookies.signed[:user_id]
+  end
+  
+  test "should log user in if different user is logged in" do
+    @user_session.log_in users(:two)
+    @user_session.log_in @user
+    assert_equal @user.id, @session[:user_id]
+    assert_equal @user.id, @cookies.signed[:user_id]
   end
   
   test "should log user out" do

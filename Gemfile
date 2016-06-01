@@ -23,15 +23,12 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5.x'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap_form', '~> 2.3.0'
 gem 'autoprefixer-rails', '~> 6.3.6'
-gem 'rails_12factor', '~> 0.0.3', group: :production
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -48,6 +45,12 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+group :production do
+  # Use Redis adapter to run Action Cable in production
+  gem 'redis', '~> 3.0', group: :production
+  gem 'rails_12factor', '~> 0.0.3', group: :production
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

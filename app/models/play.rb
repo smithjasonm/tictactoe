@@ -5,7 +5,6 @@ class Play < ApplicationRecord
                                     less_than_or_equal_to: 2 }
   validates :number, numericality: { only_integer: true, greater_than_or_equal_to: 1,
                                      less_than_or_equal_to: 9 }
-  validates :game, presence: true
   
   # Prevent plays from being destroyed.
   before_destroy { raise ReadOnlyRecord }

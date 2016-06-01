@@ -13,17 +13,19 @@
 
 ActiveRecord::Schema.define(version: 20160415231619) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "games", force: :cascade do |t|
     t.integer  "player1_id"
     t.integer  "player2_id"
     t.integer  "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["player1_id"], name: "index_games_on_player1_id", using: :btree
+    t.index ["player2_id"], name: "index_games_on_player2_id", using: :btree
+    t.index ["status"], name: "index_games_on_status", using: :btree
   end
-
-  add_index "games", ["player1_id"], name: "index_games_on_player1_id"
-  add_index "games", ["player2_id"], name: "index_games_on_player2_id"
-  add_index "games", ["status"], name: "index_games_on_status"
 
   create_table "plays", force: :cascade do |t|
     t.integer  "game_id"
@@ -32,9 +34,8 @@ ActiveRecord::Schema.define(version: 20160415231619) do
     t.integer  "y"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_plays_on_game_id", using: :btree
   end
-
-  add_index "plays", ["game_id"], name: "index_plays_on_game_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "handle"
@@ -42,9 +43,9 @@ ActiveRecord::Schema.define(version: 20160415231619) do
     t.string   "password_digest"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["handle"], name: "index_users_on_handle", unique: true, using: :btree
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["handle"], name: "index_users_on_handle", unique: true
-
+  add_foreign_key "plays", "games"
 end

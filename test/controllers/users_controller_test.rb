@@ -29,7 +29,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create user" do
     assert_difference('User.count') { create_user }
-    assert_redirected_to user_path(User.last)
+    assert_redirected_to games_path
   end
   
   test "should render errors creating user" do

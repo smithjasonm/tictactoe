@@ -32,10 +32,9 @@ class NotLoggedInTest < ActionDispatch::IntegrationTest
                                       email: 'new_user@example.com',
                                    password: 'secret',
                       password_confirmation: 'secret' } }
-    assert_response :redirect
+    assert_redirected_to "/games"
     follow_redirect!
     assert_response :success
-    assert_select ".record-list", 1
   end
   
   test "can log in" do

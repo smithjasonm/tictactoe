@@ -7,15 +7,25 @@ class User < ApplicationRecord
 
   minHandleLength = Rails.configuration.x.minimum_handle_length
   maxHandleLength = Rails.configuration.x.maximum_handle_length
-  validHandleFormat = Rails.configuration.x.valid_handle_format
-  maxEmailLength = Rails.configuration.x.maximum_email_address_length
-  validEmailFormat = Rails.configuration.x.valid_email_format
-  validates :handle, presence: true, length: { in: minHandleLength..maxHandleLength },
-                     format: { with: validHandleFormat },
-                     uniqueness: { case_sensitive: false }
-  validates :email, presence: true, length: { maximum: maxEmailLength },
-                    format: { with: validEmailFormat },
-                    uniqueness: { case_sensitive: false }
+  maxEmailLength  = Rails.configuration.x.maximum_email_address_length
+  
+  validates :handle,
+      presence: true,
+        length: { in: minHandleLength..maxHandleLength },
+    uniqueness: { case_sensitive: false }
+  
+  validates :handle, format: {    with: /\A[a-z0-9]/i,
+                               message: "must begin with a letter or number" }
+  
+  validates :handle,
+    format: { without: /\W/,
+              message: "can contain only letters, numbers, and underscores" }
+  
+  validates :email,
+        presence: true,
+          length: { maximum: maxEmailLength },
+          format: { with: /.+@.+\..+/ },
+      uniqueness: { case_sensitive: false }
   
   # Trim whitespace from relevant user input before validation
   before_validation :trim_whitespace

@@ -2,7 +2,7 @@
   <%= game_title(@game) %>
 <% end -%>
 
-<div class="row">
+<div class="game-page row">
   <div class="col-sm-6 game-col">
     <div class="game-container">
       <h2><%= game_title(@game, true) %></h2>
@@ -17,7 +17,7 @@
   </div>
   <div class="col-sm-4 col-sm-offset-1">
     <% if @opponent %>
-      <h3><%= pair_record_title(@opponent) %></h3>
+      <h3>You vs. <%= link_to @opponent.handle, @opponent %></h3>
       <%= render partial: 'record_list', object: @pair_record %>
     <% end %>
   </div>

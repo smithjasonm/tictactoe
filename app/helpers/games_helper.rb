@@ -46,7 +46,7 @@ module GamesHelper
     user_id = user_session.current_user.id
     case game.status
     when Game::PENDING
-      'Awaiting second player...' if game.waiting?
+      'Waiting for second player...' if game.waiting?
     when Game::P1_WON
       user_id == game.player1_id ? 'You won!' : 'You lost'
     when Game::P2_WON
@@ -71,13 +71,40 @@ module GamesHelper
   # Return title for game according to whether it has a second player.
   # Optionally, include indicators of which user plays X and which O.
   def game_title(game, with_indicators = false)
-    handle1 = game.player1.handle
-    handle2 = game.player2 ? game.player2.handle : '?'
-    if with_indicators
-      handle1 += ' (X)'
-      handle2 += ' (O)'
+    handle1 = current_user_is_player1?(game) ? 'You' : game.player1.handle
+    if current_user_is_player2?(game)
+      handle2 = 'You'
+    else
+      handle2 = game.player2 ? game.player2.handle : '?'
     end
+    
+    if with_indicators
+      handle1 = <<-HANDLE1.html_safe
+        <span class="nowrap">
+          #{h handle1}
+          (<span class="indicator">X</span>)
+        </span>
+      HANDLE1
+      
+      handle2 = <<-HANDLE2.html_safe
+        <span class="nowrap">
+          #{h handle2}
+          (<span class="indicator">O</span>)
+        </span>
+      HANDLE2
+    end
+    
     handle1 + ' vs. ' + handle2
+  end
+  
+  # Determine whether current user is player 1 of given game
+  def current_user_is_player1?(game)
+    user_session.current_user.id == game.player1_id
+  end
+  
+  # Determine whether current user is player 2 of given game
+  def current_user_is_player2?(game)
+    user_session.current_user.id == game.player2_id
   end
   
   # Render button to enable user to delete or resign from pending game or start a new one

@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="col-sm-9">
-    <h3><%= link_to game_title(ongoing_game), ongoing_game %></h3>
+    <h3><%= link_to opponent_handle(ongoing_game), ongoing_game %></h3>
     <div class="last-game-activity" data-game-id="<%= ongoing_game.id %>">
       Last activity <%= time_ago_in_words(ongoing_game.updated_at) %> ago
     </div>

@@ -1,6 +1,6 @@
 <div class="completed-game">
   <h3>
-    <%= link_to game_title(completed_game), completed_game %>
+    <%= link_to opponent_handle(completed_game), completed_game %>
   </h3>
   <div class="date"><%= time_ago_in_words(completed_game.updated_at) %> ago</div>
   <div class="result">Result: <%= game_result(completed_game) %></div>

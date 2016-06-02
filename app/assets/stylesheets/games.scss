@@ -2,7 +2,21 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.games-page, .game-page {
+  h2 {
+    font-size: 22px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  .indicator {
+    color: #900020; // burgundy
+  }
+}
+
 .game {
+  $border-color: darkgreen;
+  
   margin: 20px auto;
   border-collapse: collapse;
   td {
@@ -10,16 +24,17 @@
     height: 100px;
     text-align: center;
     color: blue;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.2);
     font-size: 75px;
     line-height: 1;
     cursor: default;
     user-select: none;
   }
   td:not(:last-child) {
-    border-right: 2px solid green;
+    border-right: 2px solid $border-color;
   }
   tr:not(:last-child) {
-    border-bottom: 2px solid green;
+    border-bottom: 2px solid $border-color;
   }
   &.playable {
     .empty {
@@ -50,4 +65,9 @@
       cursor: default;
     }
   }
+}
+
+.waiting-game:not(:last-child), .completed-game:not(:last-child) {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
 }

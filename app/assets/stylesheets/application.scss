@@ -22,6 +22,10 @@
   white-space: nowrap;
 }
 
+body:not(.cover-body) {
+  padding-bottom: 20px;
+}
+
 // Navigation bar avatar
 .navbar .avatar {
   display: inline-block;

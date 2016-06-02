@@ -45,6 +45,8 @@ module GamesHelper
   def game_status_text(game)
     user_id = user_session.current_user.id
     case game.status
+    when Game::PENDING
+      'Awaiting second player...' if game.waiting?
     when Game::P1_WON
       user_id == game.player1_id ? 'You won!' : 'You lost'
     when Game::P2_WON
@@ -55,8 +57,6 @@ module GamesHelper
       user_id == game.player1_id ? 'You resigned' : "#{ game.player2.handle } resigned"
     when Game::P2_FORFEIT
       user_id == game.player2_id ? 'You resigned' : "#{ game.player1.handle } resigned"
-    else
-      nil
     end
   end
   

@@ -53,7 +53,7 @@ All waiting games will appear in the waiting-games list. Any of these (except th
 
 ### Playing a Game
 
-Player 1 of a game, who plays "X," is the user who created the game. Player 2, who plays "O," is the player who joined the game. Once a game has two players, the first player may make the first play. To make the play, the user clicks on an empty space on the game grid. An "x" will appear, and it will now be the second player's turn. The game progresses in this manner until a player wins or resigns or the game is drawn. The current status of the game appears below the game along with a button, if the game is ongoing, to resign. When the game is completed, it will appear in each user's list of recent games.
+Player 1 of a game, who plays "X," is the user who created the game. Player 2, who plays "O," is the player who joined the game. Once a game has two players, the first player may make the first play. To make the play, the user clicks on an empty space on the game grid. An "X" will appear, and it will now be the second player's turn. The game progresses in this manner until a player wins or resigns or the game is drawn. The current status of the game appears below the game along with a button, if the game is ongoing, to resign. When the game is completed, it will appear in each user's list of recent games.
 
 ### Playing Again
 At the conclusion of a game, each player will have the option of inviting the other player to play again. When a user clicks the appropriate button to play again, the user's opponent is given the choice either to accept the invitation or to decline it. If the invited user accepts the invitation, a new game will be created to which both users will be redirected. If the user declines the invitation, the inviting player will be informed of the decision. If the invited user leaves the game page before making a decision, or fails to respond within a given time, the inviting user will notified that the other user failed to respond or was otherwise unavailable to play again.
@@ -107,7 +107,7 @@ The user model represents a user of the application. Each user has a "handle" (i
  - Retrieve the user's completed games
  - Retrieve the user's waiting game (i.e., the game, if it exists, created by the user that awaits a second player)
 
-#### Validation
+#### Validations
 
 Usernames and email addresses are case-insensitive and must be unique. Usernames must begin with a letter or number, have at least three and no more than 15 characters, and contain only letters, numbers, and underscores. Email addresses may not contain more than 255 characters.
 
@@ -118,7 +118,7 @@ The game model represents a single game. Each game has a status, 0–9 plays, an
  - Get the number of the next play (each play is numbered from 1–9)
  - Determine whether given x and y values are valid game coordinates
  - Determine whether a given position is available
- - Get the state of a given position (i.e., empty or occupied by X or O)
+ - Get the state of a given position (i.e., empty, occupied by X, or occupied by O)
  - Make a play
  - Register a player's resignation
  - Get the player whose turn it is
@@ -127,9 +127,11 @@ The game model represents a single game. Each game has a status, 0–9 plays, an
  - Determine whether the game is ongoing
  - Determine whether the game is waiting
  - Determine whether the game is completed
- - Get a list of all the waiting games
+ - Get a list of all waiting games
 
 #### Constants
+
+Statuses:
 
  - PENDING
  - P1_WON
@@ -138,7 +140,7 @@ The game model represents a single game. Each game has a status, 0–9 plays, an
  - P1_FORFEIT
  - P2_FORFEIT
 
-#### Validation
+#### Validations
 
 A game's status must be an integer ranging from 0-5.
 
@@ -146,11 +148,11 @@ A game's status must be an integer ranging from 0-5.
 
 The play model represents a game play or "move." A play results each time a user adds an X or O to a game board. Each play belongs to a game.
 
-Plays have x and y coordinates, each ranging from 0–2, and a number, 1–9, determined by the play's position in the sequence of plays associated with the game to which it belongs.
+Plays have x and y coordinates, each ranging from 0–2, and a number, 1–9, indicating the play's position in the sequence of plays associated with the game to which it belongs.
 
 The model also provides a public method to get the number (1 or 2) of the player who made the play.
 
-#### Validation
+#### Validations
 
 A play's coordinates, x and y, must be integers between 0 and 2, inclusive. Its number must be an integer between 1 and 9, inclusive.
 
@@ -167,13 +169,13 @@ The user-session model represents a user session. It stores the current session 
 
 ### Static Pages
 
-The static-pages controller serves the pages of the application that do not change for each user. Currently, only one such page exists, namely, the home page.
+The static-pages controller serves the pages of the application that do not change for each user and are not handled by another controller. Currently, only one such page exists, namely, the home page.
 
 ### Users
 
 The users controller includes actions to perform the following tasks:
 
- - Display the user-lookup tool
+ - Display a user-lookup tool
  - Display a user profile
  - Display a form to edit a user's settings
  - Display a form to register a new user
@@ -188,20 +190,20 @@ The games controller includes actions to perform the following tasks:
  - Display the games page, which includes waiting, ongoing, and completed games
  - Display a single game's page
  - Create a game
- - Register the addition of a second player or a player's resignation
+ - Add a second player to a game or register a player's resignation
  - Cancel a game
 
 ### Sessions
 
-The sessions controller handles logging in and out. It includes actions to perform the following tasks:
+The sessions controller handles logging in and logging out. It includes actions to perform the following tasks:
 
- - Display the login form
+ - Display a login form
  - Log a user in
  - Log a user out
 
 ## Action Cable Channels
 
-An important element of the application's architecture is its reliance on Action Cable. Action Cable provides the mechanism by which the application client can be updated in real time with messages broadcast from the server. The application uses this capacity to facilitate updates both to ongoing games and to lists of waiting games.
+Action Cable is an essential element of the application's architecture. It provides the mechanism by which the application client can be updated in real time with messages broadcast from the server. The application uses this capacity to facilitate updates both to ongoing games and to lists of waiting games.
 
 ### Games
 
@@ -211,6 +213,6 @@ In addition to receiving messages through the games channel, the application cli
 
 ### Waiting Games
 
-The waiting-games channel allows clients to subscribe for updates to their lists of waiting games. A message is broadcast through this channel each time a game is created without a second player, joined, or canceled. On receipt of a message from this channel while a waiting-games list is displayed, the application client either appends a game to its waiting-games list or removes one, according to the message.
+The waiting-games channel allows clients to subscribe for updates to their lists of waiting games. A message is broadcast through this channel each time a game is started from the games page, joined, or canceled. On receipt of a message from this channel while a waiting-games list is displayed, the application client either appends a game to its waiting-games list or removes one, according to the type of message.
 
 Copyright © 2016 Jason Smith

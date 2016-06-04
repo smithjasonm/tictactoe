@@ -40,4 +40,4 @@ $(document).on "click", ".game.playable .position.empty", (event) ->
       y: position.y
       number: nextPlayNumber
   
-  App.gameSubscriptions[gameId].perform "make_play", data
+  App.gameChannelClient.subscriptions[gameId].perform "make_play", data

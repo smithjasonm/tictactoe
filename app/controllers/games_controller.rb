@@ -115,8 +115,7 @@ class GamesController < ApplicationController
       return
     end
     
-    # Broadcast message to clients directing them to update their lists
-    # of waiting games.
+    # Broadcast notice of game update to clients along with current game status.
     GameChannel.broadcast_to @game, user_id: user_id, status: @game.status,
                                                       action: 'update_game'
     

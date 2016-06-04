@@ -49,8 +49,8 @@ end
 
 group :production do
   # Use Redis adapter to run Action Cable in production
-  gem 'redis', '~> 3.0', group: :production
-  gem 'rails_12factor', '~> 0.0.3', group: :production
+  gem 'redis', '~> 3.0'
+  gem 'rails_12factor', '~> 0.0.3'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

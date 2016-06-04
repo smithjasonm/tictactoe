@@ -1,4 +1,4 @@
-<div class="waiting-game user-waiting-game">
+<div id="waiting-game-<%= user_waiting_game.id %>" class="waiting-game user-waiting-game">
   <h3><%= link_to user_waiting_game.player1.handle, user_waiting_game %></h3>
   <div class="created_at">
     Created <%= time_ago_in_words(user_waiting_game.created_at) %> ago

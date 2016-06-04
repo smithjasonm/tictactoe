@@ -38,8 +38,15 @@ $(document).on "turbolinks:load", ->
           $("#game_#{data.game_id}_player2_id").val App.User.id
       
         # Remove a game from the list of waiting games. If, after its removal, no more
-        # waiting games remain, insert text indicating so.
+        # waiting games remain, insert text indicating so. If the game to be removed
+        # was created by the user, however, reload the page instead so that the
+        # now ongoing game will be displayed as well.
         when 'remove_game'
-          $("#waiting-game-#{data.game_id}").remove()
-          if $(".waiting-game").length == 0
-            $waiting_games.html '<p id="no-waiting-games">No waiting games</p>'
+          $game = $("#waiting-game-#{data.game_id}")
+          
+          if $game.hasClass("user-waiting-game")
+            Turbolinks.visit(window.location)
+          else
+            $game.remove()
+            if $(".waiting-game").length == 0
+              $waiting_games.html '<p id="no-waiting-games">No waiting games</p>'

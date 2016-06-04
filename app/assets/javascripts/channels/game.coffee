@@ -7,11 +7,13 @@ class GameChannelClient
   # The methods to be attached to each game-channel subscription
   subscriptionMethods:
     
-    # On permanent disconnection from server, clear all subscriptions.
-    disconnected: (options) ->
-      unless options.willAttemptReconnect
-        subscription.unsubscribe() for subscription in @subscriptions
-        @subscriptions = {}
+    # On permanent disconnection from server, unsubscribe and delete the stored
+    # reference to the subscription from the subscriptions hash, referenced in each
+    # subscription as @gameSubscriptions.
+    disconnected: ({willAttemptReconnect}) ->
+      unless willAttemptReconnect
+        @unsubscribe()
+        delete @gameSubscriptions[@gameId]
   
     # Handle receipt of messages from server.
     received: (data) ->
@@ -194,7 +196,7 @@ class GameChannelClient
   # Subscribe to updates for game with given id.
   subscribeToGame: (gameId) ->
     params = { channel: "GameChannel", id: gameId }
-    mixin = $.extend({gameId}, @subscriptionMethods)
+    mixin = $.extend({gameId, gameSubscriptions: @subscriptions}, @subscriptionMethods)
     @subscriptions[gameId] = App.cable.subscriptions.create params, mixin
 
 window.App ||= {}

@@ -153,6 +153,38 @@ class Game < ApplicationRecord
     status != PENDING
   end
   
+  # Get the winning set of play coordinates ([x, y]), or nil if one does not exist
+  def winning_play_coordinates
+    return nil unless status.in? [P1_WON, P2_WON, P1_FORFEIT, P2_FORFEIT]
+    return @winning_coordinates if @winning_coordinates
+    
+    @winning_coordinates = Set.new
+    
+    3.times do |row|
+      if check_row(row)
+        3.times {|col| @winning_coordinates << [col, row] }
+        return @winning_coordinates
+      end
+    end
+    
+    3.times do |col|
+      if check_column(col)
+        3.times {|row| @winning_coordinates << [col, row] }
+        return @winning_coordinates
+      end
+    end
+    
+    if check_diagonal_left_right
+      3.times {|n| @winning_coordinates << [n, n] }
+      return @winning_coordinates
+    end
+    
+    if check_diagonal_right_left
+      3.times {|n| @winning_coordinates << [2 - n, n] }
+      return @winning_coordinates
+    end
+  end
+  
   # Fetch all waiting games, optionally excluding those created by user with given id,
   # sorted in descending order by time created.
   def self.waiting_games(excluded_user_id = nil)

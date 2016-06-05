@@ -13,6 +13,8 @@ module GamesHelper
     end
     
     cell_class = "position #{ position_state.nil? ? 'empty' : 'filled' }"
+    cell_class += ' winning' if game.winning_play_coordinates.try :include?, [col, row]
+    
     cell_data = { x: col, y: row}
     
     game_cell = { cell_class: cell_class, cell_data: cell_data, cell_value: cell_value }

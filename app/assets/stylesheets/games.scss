@@ -29,6 +29,9 @@
     line-height: 1;
     cursor: default;
     user-select: none;
+    &.winning {
+      color: red;
+    }
   }
   td:not(:last-child) {
     border-right: 2px solid $border-color;

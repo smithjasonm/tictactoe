@@ -256,6 +256,17 @@ class GameTest < ActiveSupport::TestCase
     assert_not games(:waiting_game).completed?
   end
   
+  test "should get winning play coordinates" do
+    game = games(:new_game)
+    make_player1_win game
+    expected = Set.new [[0,0], [0,1], [0,2]]
+    assert_equal expected, game.winning_play_coordinates
+  end
+  
+  test "should return nil for winning play coordinates that do not exist" do
+    assert_nil games(:forfeited_game).winning_play_coordinates
+  end
+  
   test "should get waiting games without excluded user" do
     waiting_games = Game.waiting_games
     assert_equal 1, waiting_games.size

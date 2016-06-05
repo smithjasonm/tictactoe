@@ -56,9 +56,9 @@ module GamesHelper
     when Game::DRAW
       'Draw'
     when Game::P1_FORFEIT
-      user_id == game.player1_id ? 'You resigned' : "#{ game.player2.handle } resigned"
+      user_id == game.player1_id ? 'You resigned' : "#{ game.player1.handle } resigned"
     when Game::P2_FORFEIT
-      user_id == game.player2_id ? 'You resigned' : "#{ game.player1.handle } resigned"
+      user_id == game.player2_id ? 'You resigned' : "#{ game.player2.handle } resigned"
     end
   end
   

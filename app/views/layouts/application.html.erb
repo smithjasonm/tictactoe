@@ -16,8 +16,19 @@
     <%= render 'layouts/flash' %>
     <%= yield %>
   </div>
+  
   <script>
     App.User.id = <%= user_session.current_user.id %>;
+  </script>
+  
+  <!-- Templates -->
+  
+  <script type="text/template" id="play-again-request-template">
+    <%= render 'games/play_again_request' %>
+  </script>
+  
+  <script type="text/template" id="play-again-status-template">
+    <%= render 'games/play_again_status' %>
   </script>
 </body>
 </html>

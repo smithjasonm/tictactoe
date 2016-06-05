@@ -71,18 +71,7 @@ class GameChannelClient
     
       # Replace the play-again button with buttons to accept or reject the invitation
       # to play again.
-      $(".play-again").parent().replaceWith '
-        <section id="play-again-request">
-          <p>Your opponent has invited you to play again!</p>
-          <p>
-            <button id="confirm-play-again" class="decide-play-again btn btn-primary">
-              Play again
-            </button>
-            <button id="reject-play-again" class="decide-play-again btn btn-default">
-              Decline
-            </button>
-          </p>
-        </section>'
+      $(".play-again").parent().replaceWith $("#play-again-request-template").html()
     
       # If the user navigates to a different page while an invitation to play again is
       # pending, clear the timeout and send a message of unavailability.
@@ -166,17 +155,18 @@ class GameChannelClient
     $(document).on "click", ".play-again", (event) =>
       gameId = $(".game").data("id")
       
-      $(event.currentTarget).parent().replaceWith '
-        <section id="play-again-status">
-          <p>Awaiting response from opponent...</p>
-          <p><button id="cancel-play-again" class="btn btn-default">Cancel</button></p>
-        </section>'
+      # Replace the play-again button's container with text indicating the status
+      # of the invitation and a cancel button.
+      $(event.currentTarget).parent().replaceWith $("#play-again-status-template").html()
       
+      # Send the request.
       @subscriptions[gameId].perform "request_play_again"
       
+      # Cancel the request if the user leaves the page.
       $(document).one "turbolinks:visit.playAgain", ->
         @subscriptions[gameId].perform "cancel_play_again"
       
+      # Cancel the request if the user clicks the cancel button.
       $("#cancel-play-again").click ->
         $("#play-again-status").remove()
         $(document).off "turbolinks:visit.playAgain"

@@ -6,7 +6,7 @@ Tic-Tac-Toe is a web application built with [Ruby on Rails](http://rubyonrails.o
 
 ## Turbolinks
 
-For ease and productivity of development and maintenance, the application favors the use of [Turbolinks](https://github.com/turbolinks/turbolinks) rather than the use of a client-side JavaScript framework. Turbolinks offers fast page reloads as a viable alternative to front-end view rendering.
+For ease and productivity of development and maintenance, the application favors the use of [Turbolinks](https://github.com/turbolinks/turbolinks) rather than the use of a client-side JavaScript framework. Turbolinks offers fast page reloads as a viable alternative to client-side view rendering.
 
 ## Action Cable
 
@@ -18,12 +18,12 @@ Action Cable requires client-side code to handle the disposition of messages to 
 
 ## Bootstrap
 
-The application uses [Bootstrap](http://getbootstrap.com/), the front-end Web framework, to facilitate development of its views.
+The application uses [Bootstrap](http://getbootstrap.com/), the front-end Web framework, as the foundation for its views.
 
 # Use
 
 ## Registration and Login
-On visiting the application for the first time, the user is presented with a welcome page that includes an invitation to start playing. Following the corresponding link will take the user to a registration page, where the user will be asked to provide a username, email address, and password. After these have been submitted and validated, an account will be created for the user, who will then be logged in and redirected to the games page.
+On visiting the application for the first time, a user is presented with a welcome page that includes an invitation to start playing. Following the corresponding link will take the user to a registration page, where the user will be asked to provide a username, email address, and password. After these have been submitted and validated, an account will be created for the user, who will then be logged in and redirected to the games page.
 
 A login form is provided for returning users.
 
@@ -35,13 +35,13 @@ The games page contains three lists of games:
   - Ongoing games
   - Recent games
 
-Waiting games are games that are awaiting a second player. On the games page, they include information about who created the game and when it was created.
+Waiting games are games that are awaiting a second player. On the games page, they include information about who created the game and when it was created. If a waiting game was created by the user, it is referred to as the user's own waiting game and appears at the top of the user's waiting-games list. A user may have only one such game at a time.
 
 Ongoing games are games that are currently in progress—that is, they are neither waiting nor completed. On the games page, they include a thumbnail of the game as well as information about who the user's opponent is and when the last activity occurred.
 
-Recent games are the the last few completed games in which the user participated. On the games page, in addition to linking to the game, they tell who the user's opponent was, the result of the game, and when the game was completed.
+Recent games are the last few completed games in which the user participated. On the games page, in addition to linking to the game, they tell who the user's opponent was, the result of the game, and when the game was completed.
 
-From the games page, the user may start a game, join a game, or visit a game that is ongoing, recent, or the user's own waiting game (that is, the waiting game created by the user, of which the user may have at most one at a time). A game and its associated information may be viewed only by the game's participants.
+From the games page, the user may start a game, join a game, or visit a game that is ongoing, recent, or the user's own waiting game. A game and its associated information may be viewed only by the game's participants.
 
 ### Starting a Game
 
@@ -49,7 +49,7 @@ When the user chooses to start a game, the game will be created and the user wil
 
 ### Joining a Game
 
-All waiting games will appear in the waiting-games list. Any of these (except the one created by the current user, if it exists) may be joined by clicking the corresponding "join" button. When the user joins a game, the game will become an ongoing game and the user will be redirected to that game's page. In addition to the game board, this page will now contain each user's record against the other.
+All waiting games will appear in the waiting-games list. Any of these (except the user's own waiting game, if it exists) may be joined by clicking the corresponding "join" button. When the user joins a game, the game will become an ongoing game and the user will be redirected to that game's page. In addition to the game board, this page will now contain the user's record against the current opponent.
 
 ### Playing a Game
 
@@ -66,7 +66,7 @@ A user provides a username, email address, and password when creating an account
 
 ### Profiles
 
-Each user has a profile, which contains the user's username, Gravatar, full game record, and (unless the profile belongs to the visiting user) game record against the visiting user. Users may navigate to these profiles either by visiting the users page, which contains a user-lookup tool, or by following a link to the profile provided on a game page. The user-lookup tool permits lookups by username and email address.
+Each user has a profile, which contains the user's username, Gravatar, full game record, and (unless the profile belongs to the visiting user) the visiting user's game record against that user. Users may navigate to these profiles either by visiting the users page, which contains a user-lookup tool, or by following a link to the profile provided on a game page. The user-lookup tool permits lookups by username and by email address.
 
 ### Settings
 
@@ -105,7 +105,7 @@ The user model represents a user of the application. Each user has a "handle" (i
  - Retrieve all the games participated in by the user
  - Retrieve the user's ongoing games
  - Retrieve the user's completed games
- - Retrieve the user's waiting game (i.e., the game, if it exists, created by the user that awaits a second player)
+ - Retrieve the user's own waiting game (i.e., the game, if it exists, created by the user that awaits a second player)
 
 #### Validations
 
@@ -115,10 +115,10 @@ Usernames and email addresses are case-insensitive and must be unique. Usernames
 
 The game model represents a single game. Each game has a status, 0–9 plays, and 0–2 players. The model also provides public methods to perform the following tasks:
 
- - Get the number of the next play (each play is numbered from 1–9)
+ - Get the number of the next play (each play being numbered from 1–9)
  - Determine whether given x and y values are valid game coordinates
- - Determine whether a given position is available
- - Get the state of a given position (i.e., empty, occupied by X, or occupied by O)
+ - Determine whether a given position (i.e, game cell) is available
+ - Get the state of a given position—empty, occupied by X, or occupied by O
  - Make a play
  - Register a player's resignation
  - Get the player whose turn it is
@@ -127,6 +127,7 @@ The game model represents a single game. Each game has a status, 0–9 plays, an
  - Determine whether the game is ongoing
  - Determine whether the game is waiting
  - Determine whether the game is completed
+ - Get the coordinate set of the winning three plays—that is, the three plays made by the winning player that fill a single row, column, or diagonal
  - Get a list of all waiting games
 
 #### Constants
@@ -169,7 +170,7 @@ The user-session model represents a user session. It stores the current session 
 
 ### Static Pages
 
-The static-pages controller serves the pages of the application that do not change for each user and are not handled by another controller. Currently, only one such page exists, namely, the home page.
+The static-pages controller serves the pages of the application that do not change for each user and are not handled by another controller. Currently, only one such page exists, namely, the home page. Logged-in users who navigate to the home page are redirected to the games page.
 
 ### Users
 
@@ -177,8 +178,9 @@ The users controller includes actions to perform the following tasks:
 
  - Display a user-lookup tool
  - Display a user profile
- - Display a form to edit a user's settings
  - Display a form to register a new user
+ - Display a form to edit a user's settings
+ - Register a new user
  - Update a user's settings
  - Remove a user
  - Find a user by username or email address
@@ -213,6 +215,6 @@ In addition to receiving messages through the games channel, the application cli
 
 ### Waiting Games
 
-The waiting-games channel allows clients to subscribe for updates to their lists of waiting games. A message is broadcast through this channel each time a game is started from the games page, joined, or canceled. On receipt of a message from this channel while a waiting-games list is displayed, the application client either appends a game to its waiting-games list or removes one, according to the type of message.
+The waiting-games channel allows clients to subscribe for updates to their lists of waiting games. A message is broadcast through this channel each time a game is started from the games page, joined, or canceled. On receipt of a message from this channel while a waiting-games list is displayed, the application client either appends a game to its waiting-games list or removes one, according to the type of message received.
 
 Copyright © 2016 Jason Smith

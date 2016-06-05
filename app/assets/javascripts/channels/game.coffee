@@ -41,7 +41,7 @@ class GameChannelClient
           opponent_handle = $game.data("opponent-handle")
           $whose_turn.text "#{ opponent_handle }'s turn"
         else
-          App.Game.addPlay @gameId, data.latestPlay
+          App.gameManager.addPlay @gameId, data.latestPlay
           $whose_turn.text "Your turn"
           $(".last-game-activity[data-game-id='#{ @gameId }']").text data.lastActivity
           $game.addClass "playable"

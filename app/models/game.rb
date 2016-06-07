@@ -165,7 +165,7 @@ class Game < ApplicationRecord
   # will contain three arrays, each in the form [play.x, play.y]. Returns nil if such
   # a set does not exist.
   def winning_play_coordinates
-    return nil unless status.in? [P1_WON, P2_WON, P1_FORFEIT, P2_FORFEIT]
+    return nil unless status.in? [P1_WON, P2_WON]
     
     # Return cached copy it exists.
     return @winning_coordinates if @winning_coordinates

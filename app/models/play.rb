@@ -1,3 +1,5 @@
+# Represents a play in a game. Each play has x and y coordinates and a
+# number corresponding to its position in the sequence of plays belonging to a game.
 class Play < ApplicationRecord
   belongs_to :game, inverse_of: :plays, touch: true
   

@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   helper_method :user_session
   
+  # Return the current user session, creating it if it does not exist.
   def user_session
     @user_session ||= UserSession.new(session, cookies)
   end

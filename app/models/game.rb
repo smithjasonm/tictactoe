@@ -1,3 +1,4 @@
+# Represents a game. Also provides a class method to retrieve waiting games.
 class Game < ApplicationRecord
   # Game statuses
   PENDING = 0
@@ -28,7 +29,7 @@ class Game < ApplicationRecord
     return plays.length + 1
   end
   
-  # Determine whether a given position is valid.
+  # Determine whether given x and y coordinates correspond to a position on a game board.
   def position_valid?(x, y)
     [x, y].each do |a|
       return false unless a.is_a?(Integer) && a >= 0 && a <= 2
@@ -44,6 +45,8 @@ class Game < ApplicationRecord
     state[x][y].nil?
   end
   
+  # Return 1, 2, or nil according to whether given position is claimed by player 1,
+  # player 2, or neither player, respectively.
   def position_state(x, y)
     unless position_valid?(x, y)
       raise InvalidPlayPositionError
@@ -54,6 +57,7 @@ class Game < ApplicationRecord
   # Make a play. Saves play and self automatically. Returns the new play.
   def make_play(number, x, y)
     play = nil
+    
     with_lock do
       unless status == PENDING
         raise IncompatibleGameStatusError, "Status must be PENDING; status is #{status}"
@@ -70,6 +74,7 @@ class Game < ApplicationRecord
       update_status
       save!
     end
+    
     return play
   end
   
@@ -84,6 +89,7 @@ class Game < ApplicationRecord
       self.status = P1_FORFEIT
       save!
     end
+    
     self
   end
   
@@ -99,6 +105,7 @@ class Game < ApplicationRecord
       self.status = P2_FORFEIT
       save!
     end
+    
     self
   end
   
@@ -153,13 +160,19 @@ class Game < ApplicationRecord
     status != PENDING
   end
   
-  # Get the winning set of play coordinates ([x, y]), or nil if one does not exist
+  # Get the coordinate set of the winning three plays—that is, the three plays made by
+  # the winning player that fill a single row, column, or diagonal. The set, if it exists,
+  # will contain three arrays, each in the form [play.x, play.y]. Returns nil if such
+  # a set does not exist.
   def winning_play_coordinates
     return nil unless status.in? [P1_WON, P2_WON, P1_FORFEIT, P2_FORFEIT]
+    
+    # Return cached copy it exists.
     return @winning_coordinates if @winning_coordinates
     
     @winning_coordinates = Set.new
     
+    # Check rows.
     3.times do |row|
       if check_row(row)
         3.times {|col| @winning_coordinates << [col, row] }
@@ -167,6 +180,7 @@ class Game < ApplicationRecord
       end
     end
     
+    # Check columns.
     3.times do |col|
       if check_column(col)
         3.times {|row| @winning_coordinates << [col, row] }
@@ -174,11 +188,13 @@ class Game < ApplicationRecord
       end
     end
     
+    # Check diagonal starting at top left.
     if check_diagonal_left_right
       3.times {|n| @winning_coordinates << [n, n] }
       return @winning_coordinates
     end
     
+    # Check diagonal starting at top right.
     if check_diagonal_right_left
       3.times {|n| @winning_coordinates << [2 - n, n] }
       return @winning_coordinates
@@ -205,23 +221,38 @@ class Game < ApplicationRecord
       @state
     end
     
-    # Update pending-game status based on plays made so far.
+    # Update game status based on plays made so far. Possible changes are from PENDING
+    # to P1_WON, P2_WON, or DRAW.
     def update_status
+      
+      # A status change is possible only if current status is pending and more than
+      # three plays have been made.
       if status == PENDING && plays.length > 2
         result = false
+        
+        # Check for a winning combination of plays.
+        
+        # Check each row and column.
         3.times do |n|
           result = check_row(n)
           result = check_column(n) if result == false
           break unless result == false
         end
+        
+        # Check each diagonal
         result = check_diagonal_left_right if result == false
         result = check_diagonal_right_left if result == false
+        
+        # If a winning combination of plays was found, update the game status
+        # to indicate which player won. Otherwise, if 9 plays have been made,
+        # mark the game as drawn.
         if result != false
           self.status = result == 1 ? P1_WON : P2_WON
         elsif plays.length == 9
           self.status = DRAW
         end
       end
+      
       self
     end
     

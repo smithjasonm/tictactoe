@@ -1,19 +1,29 @@
+# Receives and transmits game updates. Each channel subscription is for a single game.
 class GameChannel < ApplicationCable::Channel
   include ActionView::Helpers::DateHelper
   include Rails.application.routes.url_helpers
   
+  # On channel subscription, stream updates for specified game.
   def subscribed
     @game = Game.find(params[:id])
     stream_for @game
   end
   
+  # Make a play.
   def make_play(data)
+    
+    # Update the stored game instance.
     @game.reload
+    
+    # Only permit a play to be made if the game is ongoing and it is the turn
+    # of the user who is requesting to make the play.
     return unless @game.ongoing? && current_user.id == @game.whose_turn.id
-                            
+    
+    # Make the play.
     p = data['play']
     play = @game.make_play(p['number'], p['x'], p['y'])
     
+    # Broadcast the play to listening clients.
     broadcast = {
       action: 'make_play',
       userId: current_user.id,
@@ -26,9 +36,9 @@ class GameChannel < ApplicationCable::Channel
         number: play.number
       }
     }
-    
     GameChannel.broadcast_to @game, broadcast
     
+    # If any recognized errors occur while making the play, do nothing.
     rescue IncompatibleGameStatusError, InvalidPlayNumberError,
                                       PositionUnavailableError => e
       return

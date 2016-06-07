@@ -2,6 +2,7 @@ module UsersHelper
   # Get a Gravatar image tag for a user and context.
   def gravatar_image_tag(user, context = nil)
     context = context.try(:to_sym)
+    
     case context
     when :profile
       size = 350
@@ -13,6 +14,7 @@ module UsersHelper
       size = 80
       img_alt = user.handle
     end
+    
     email = user.nil? ? "" : user.email
     
     image_tag avatar_url(email, size),

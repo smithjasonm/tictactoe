@@ -1,3 +1,4 @@
+# Represents a user of the application.
 class User < ApplicationRecord
   has_secure_password
   has_many :created_games, class_name: "Game", foreign_key: "player1_id",

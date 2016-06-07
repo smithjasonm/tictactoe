@@ -1,8 +1,10 @@
 module GamesHelper
   # Render a cell on a game board
   def game_cell(game, row, col)
-    position_state = game.position_state(col, row)
+    position_state = game.position_state(col, row) # 1, 2, or nil
     
+    # Indicate game cells claimed by player 1 with an "X," by player 2 with an "O,"
+    # and by neither player with an empty string.
     case position_state
     when 1
       cell_value = 'X'
@@ -21,6 +23,7 @@ module GamesHelper
     render partial: 'games/game_cell', object: game_cell
   end
   
+  # Return the class string to be used for the given game.
   def game_class(game)
     result = 'game'
     if game.ongoing? && game.whose_turn.id == user_session.current_user.id
@@ -44,6 +47,7 @@ module GamesHelper
     player.id == user_session.current_user.id ? 'Your turn' : "#{ player.handle }'s turn"
   end
   
+  # Return text to indicate given game's status.
   def game_status_text(game)
     user_id = user_session.current_user.id
     case game.status

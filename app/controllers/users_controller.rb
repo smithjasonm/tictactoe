@@ -50,7 +50,6 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    
     respond_to do |format|
       if @user.update(user_params)
         format.any(:html, :js) do
@@ -80,15 +79,25 @@ class UsersController < ApplicationController
     end
   end
   
+  # Search for a user by handle or by email address.
+  #
   # GET /users/search
   # GET /users/search.json
   def search
     query = params[:query]
+    
+    # If the query includes an "@," search by email address, otherwise search by handle.
+    # The search is case-insensitive. Since the handles and email addresses are stored
+    # in the database in their original forms, without first being converted to
+    # lowercase, it is necessary to convert them to lowercase during the search.
+    # This involves full-table scans, which would be inefficient for larger tables,
+    # but are of no consequence to this application.
     if query.include? '@'
       @user = User.find_by 'LOWER(email) = LOWER(?)', query
     else
       @user = User.find_by 'LOWER(handle) = LOWER(?)', query
     end
+    
     respond_to do |format|
       if @user
         format.html { redirect_to @user }

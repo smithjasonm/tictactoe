@@ -1,3 +1,5 @@
+# Represents a user session. Handles user login and logout and provides methods to
+# determine whether a user is logged in and, if so, who that user is.
 class UserSession
   def initialize(session, cookies)
     @session = session
@@ -8,7 +10,10 @@ class UserSession
   def log_in(user)
     raise TypeError unless user.is_a? User
     @session[:user_id] = user.id
-    @cookies.signed[:user_id] = user.id # Used for Action Cable (and possibly routing)
+    
+    # Set a cookie containing the user's ID for use by Action Cable.
+    @cookies.signed[:user_id] = user.id
+    
     @user = user
   end
   

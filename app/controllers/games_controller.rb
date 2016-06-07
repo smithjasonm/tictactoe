@@ -17,16 +17,20 @@ class GamesController < ApplicationController
   def show
     user = user_session.current_user
     user_id = user.id
+    
+    # Forbid access to users who are not participants in this game.
     unless user_id == @game.player1_id || user_id == @game.player2_id
       head :forbidden
       return
     end
+    
     if @game.pending?
       @next_play_number = @game.next_play_number
       @new_game = nil
     else
       @new_game = Game.new(player1_id: user_id)
     end
+    
     @opponent = user_id == @game.player1_id ? @game.player2 : @game.player1
     @pair_record = user.game_record(@opponent) if @opponent
   end
@@ -38,6 +42,7 @@ class GamesController < ApplicationController
     @game = Game.new(game_params)
     user = user_session.current_user
     
+    # Forbid user from having more than one waiting game at a time.
     unless user.id == @game.player1_id && user.waiting_game.nil?
       head :forbidden
       return
@@ -73,6 +78,9 @@ class GamesController < ApplicationController
     
     user_id = user_session.current_user.id
     game_params = params.require(:game).permit(:player2_id, :status)
+    
+    # Register a player's resignation or add a second player according to the parameters
+    # received.
     if game_params[:status]
       # Allow status updates only of ongoing games
       unless @game.ongoing?
@@ -82,27 +90,36 @@ class GamesController < ApplicationController
       
       case game_params[:status].to_i
       when Game::P1_FORFEIT
+        # Permit resignation of player 1 only by player 1.
         unless user_id == @game.player1.id
           head :forbidden
           return
         end
         @game.player1_forfeits
       when Game::P2_FORFEIT
+        # Permit resignation of player 2 only by player 2.
         unless user_id == @game.player2.id
           head :forbidden
           return
         end
         @game.player2_forfeits
+      
       else
+        # Forbid updates to status other than resignations.
         head :forbidden
         return
       end
+    
     elsif game_params[:player2_id]
       player2_id = game_params[:player2_id].to_i
+      
+      # Forbid setting second player if second player already exists or if current
+      # user is different from would-be second player.
       unless @game.player2_id.nil? && user_id == player2_id
         head :forbidden
         return
       end
+      
       @game.update!(player2_id: player2_id)
       
       # Broadcast message to clients directing them to update their lists
@@ -111,6 +128,8 @@ class GamesController < ApplicationController
                                                    user_id: user_id,
                                                    game_id: @game.id
     else
+      # Respond with bad-request status code if user does not try to update status or
+      # add a second player.
       head :bad_request
       return
     end
@@ -129,10 +148,13 @@ class GamesController < ApplicationController
   # DELETE /games/1.json
   def destroy
     user_id = user_session.current_user.id
+    
+    # Permit a game to be deleted only if it belongs to the current user and is waiting.
     unless user_id == @game.player1_id && @game.player2.nil?
       head :forbidden
       return
     end
+    
     @game.destroy
     
     # Broadcast message to clients directing them to update their lists

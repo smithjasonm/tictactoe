@@ -46,21 +46,27 @@ class GameChannel < ApplicationCable::Channel
       return
   end
   
-  # Request to play another game. Include a time of expiration of the request
-  # to prevent unreasonable delays.
+  # Request to play another game.
   def request_play_again
+    
+    # Broadcast notification of request, including a time of its expiration
+    # to prevent unreasonable delays.
     GameChannel.broadcast_to @game, user_id: current_user.id,
                                      action: 'request_play_again',
                                     expires: Time.now.to_i + 60
   end
   
-  # Accept a request to play another game; if the expiration time has passed, however,
-  # do nothing. Include in the message of acceptance the location of the new game.
+  # Accept a request to play another game.
   def confirm_play_again(data)
+    
+    # Only proceed if play-again request has not timed out.
     expires = Time.at(data['expires'])
     return if expires < Time.now
     
-    new_game = Game.create player1_id: @game.player1_id, player2_id: @game.player2_id
+    # Create game, switching player 1 and player 2
+    new_game = Game.create player1_id: @game.player2_id, player2_id: @game.player1_id
+    
+    # Broadcast notification of play-again confirmation with location of new game.
     GameChannel.broadcast_to @game, action: 'confirm_play_again',
                                    user_id: current_user.id,
                                   location: game_path(new_game)

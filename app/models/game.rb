@@ -167,7 +167,7 @@ class Game < ApplicationRecord
   def winning_play_coordinates
     return nil unless status.in? [P1_WON, P2_WON]
     
-    # Return cached copy it exists.
+    # Return cached copy of set if it exists.
     return @winning_coordinates if @winning_coordinates
     
     @winning_coordinates = Set.new

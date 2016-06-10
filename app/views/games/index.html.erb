@@ -38,11 +38,11 @@
             <p id="no-waiting-games">No waiting games</p>
           <% end %>
         </section>
-        <% if @user.waiting_game.nil? -%>
-          <%= render partial: 'new_game_form', locals: { game: @new_game } %>
-        <% end -%>
       </div>
     </div>
+    <% if @user.waiting_game.nil? -%>
+      <%= render partial: 'new_game_form', locals: { game: @new_game } %>
+    <% end -%>
   </div>
   <div class="col-sm-3">
     <div class="panel panel-default">

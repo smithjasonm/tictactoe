@@ -16,6 +16,7 @@
     font-size: 18px;
   }
   h3 {
+    margin-top: 0;
     margin-bottom: 2px;
   }
   .created-at, .last-game-activity, .date {
@@ -67,6 +68,7 @@
 
 .game-preview .game {
   float: left;
+  margin-top: 0;
   margin-right: 20px;
   @media (min-width: $screen-sm-min) {
     float: none;
@@ -88,4 +90,10 @@
 .waiting-game:not(:last-child), .completed-game:not(:last-child) {
   padding-bottom: 15px;
   border-bottom: 1px solid #ccc;
+}
+
+.waiting-game, .ongoing-game, .completed-game {
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
 }

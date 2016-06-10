@@ -28,7 +28,15 @@ class WaitingGamesChannelClient
     # as this will not be set by the server.
     addGame: (data) ->
       $("#no-waiting-games").remove()
-      $("#waiting-games").prepend data.html
+      
+      # If the user has a waiting game, insert the new waiting game after it;
+      # otherwise, prepend the new waiting game to the list of waiting games.
+      $userWaitingGame = $(".user-waiting-game")
+      if $userWaitingGame.length > 0
+        $userWaitingGame.after data.html
+      else
+        $("#waiting-games").prepend data.html
+      
       $("#game_#{data.game_id}_player2_id").val App.User.id
     
     # Remove a game from the list of waiting games. If, after its removal, no more

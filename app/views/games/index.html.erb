@@ -10,13 +10,13 @@
           <h2 class="panel-title">Ongoing</h2>
         </div>
         <div class="panel-body">
-          <div class="row">
-            <div class="col-sm-9 col-sm-offset-3">
-              <% if @ongoing_games.empty? %>
+          <% if @ongoing_games.empty? %>
+            <div class="row">
+              <div class="col-sm-9 col-sm-offset-3">
                 <p>No ongoing games</p>
-              <% end %>
+              </div>
             </div>
-          </div>
+          <% end %>
           <%= render partial: 'ongoing_game', collection: @ongoing_games %>
         </div>
       </div>
@@ -28,10 +28,10 @@
         <h2 class="panel-title">Waiting</h2>
       </div>
       <div class="panel-body">
-        <% if @user_waiting_game -%>
-          <%= render partial: 'user_waiting_game', object: @user_waiting_game %>
-        <% end -%>
         <section id="waiting-games">
+          <% if @user_waiting_game -%>
+            <%= render partial: 'user_waiting_game', object: @user_waiting_game %>
+          <% end -%>
           <%= render partial: 'waiting_game', collection: @waiting_games,
                                                   locals: { user: @user } %>
           <% if @user_waiting_game.nil? && @waiting_games.empty? %>

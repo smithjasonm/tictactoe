@@ -5,38 +5,56 @@
 <div class="games-page row">
   <div class="col-sm-6 col-sm-push-3">
     <div class="ongoing-games">
-      <div class="row">
-        <div class="col-sm-9 col-sm-offset-3">
-          <h2>Ongoing games</h2>
-          <% if @ongoing_games.empty? %>
-            <p>No ongoing games</p>
-          <% end %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">Ongoing</h2>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+              <% if @ongoing_games.empty? %>
+                <p>No ongoing games</p>
+              <% end %>
+            </div>
+          </div>
+          <%= render partial: 'ongoing_game', collection: @ongoing_games %>
         </div>
       </div>
-      <%= render partial: 'ongoing_game', collection: @ongoing_games %>
     </div>
   </div>
   <div class="col-sm-3 col-sm-pull-6">
-    <h2>Waiting games</h2>
-    <% if @user_waiting_game -%>
-      <%= render partial: 'user_waiting_game', object: @user_waiting_game %>
-    <% end -%>
-    <section id="waiting-games">
-      <%= render partial: 'waiting_game', collection: @waiting_games,
-                                              locals: { user: @user } %>
-      <% if @user_waiting_game.nil? && @waiting_games.empty? %>
-        <p id="no-waiting-games">No waiting games</p>
-      <% end %>
-    </section>
-    <% if @user.waiting_game.nil? -%>
-      <%= render partial: 'new_game_form', locals: { game: @new_game } %>
-    <% end -%>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">Waiting</h2>
+      </div>
+      <div class="panel-body">
+        <% if @user_waiting_game -%>
+          <%= render partial: 'user_waiting_game', object: @user_waiting_game %>
+        <% end -%>
+        <section id="waiting-games">
+          <%= render partial: 'waiting_game', collection: @waiting_games,
+                                                  locals: { user: @user } %>
+          <% if @user_waiting_game.nil? && @waiting_games.empty? %>
+            <p id="no-waiting-games">No waiting games</p>
+          <% end %>
+        </section>
+        <% if @user.waiting_game.nil? -%>
+          <%= render partial: 'new_game_form', locals: { game: @new_game } %>
+        <% end -%>
+      </div>
+    </div>
   </div>
   <div class="col-sm-3">
-    <h2>Recent games</h2>
-    <%= render partial: 'completed_game', collection: @recent_games %>
-    <% if @recent_games.empty? %>
-      <p>No recent games</p>
-    <% end %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">Recent</h2>
+      </div>
+      <div class="panel-body">
+        <%= render partial: 'completed_game', collection: @recent_games %>
+        <% if @recent_games.empty? %>
+          <p>No recent games</p>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

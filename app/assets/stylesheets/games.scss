@@ -3,14 +3,29 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .games-page, .game-page {
-  h2 {
-    font-size: 22px;
-  }
   h3 {
     font-size: 18px;
   }
   .indicator {
     color: #900020; // burgundy
+  }
+}
+
+.games-page {
+  h2 {
+    font-size: 18px;
+  }
+  h3 {
+    margin-bottom: 2px;
+  }
+  .created-at, .last-game-activity, .date {
+    color: #909090;
+  }
+}
+
+.game-page {
+  h2 {
+    font-size: 22px;
   }
 }
 

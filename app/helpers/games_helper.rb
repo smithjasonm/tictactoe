@@ -71,7 +71,7 @@ module GamesHelper
   def game_result(completed_game)
     winner = completed_game.winner
     return 'Draw' unless winner
-    winner.id == user_session.current_user.id ? 'Won' : 'Lost'
+    winner.id == user_session.current_user.id ? 'You won!' : 'You lost'
   end
   
   # Return title for game according to whether it has a second player.

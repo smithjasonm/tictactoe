@@ -5,6 +5,10 @@
 <div class="row">
   <div class="col-sm-6">
     <%= gravatar_image_tag(@user, :profile) %>
+    <% if @user == user_session.current_user -%>
+      <p class="change-profile-picture"><%= link_to 'Change profile picture',
+                                         'https://en.gravatar.com/', target: :blank %></p>
+    <% end -%>
   </div>
   <div class="col-sm-6">
     <h2 class="text-center"><%= @user.handle %></h2>

@@ -11,11 +11,7 @@
         </div>
         <div class="panel-body">
           <% if @ongoing_games.empty? %>
-            <div class="row">
-              <div class="col-sm-9 col-sm-offset-3">
-                <p>No ongoing games</p>
-              </div>
-            </div>
+            <p>No ongoing games</p>
           <% end %>
           <%= render partial: 'ongoing_game', collection: @ongoing_games %>
         </div>

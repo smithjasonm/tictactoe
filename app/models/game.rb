@@ -226,7 +226,7 @@ class Game < ApplicationRecord
     def update_status
       
       # A status change is possible only if current status is pending and more than
-      # three plays have been made.
+      # two plays have been made.
       if status == PENDING && plays.length > 2
         result = false
         

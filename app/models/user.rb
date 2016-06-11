@@ -91,6 +91,11 @@ class User < ApplicationRecord
     created_games.find { |game| game.waiting? }
   end
   
+  # Determine whether user is a player in the given game.
+  def is_player_in?(game)
+    [game.player1_id, game.player2_id].include? id
+  end
+  
   private
     
     # Account for created games in record

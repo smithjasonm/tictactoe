@@ -185,4 +185,12 @@ class UserTest < ActiveSupport::TestCase
     assert users(:one).waiting_game.try('waiting?')
     assert_nil users(:two).waiting_game
   end
+  
+  test "should determine whether user is player in game" do
+    game = games(:pending_game)
+    
+    assert users(:one).is_player_in? game
+    assert users(:two).is_player_in? game
+    assert_not users(:three).is_player_in? game
+  end
 end

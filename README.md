@@ -106,6 +106,7 @@ The user model represents a user of the application. Each user has a "handle" (i
  - Retrieve the user's ongoing games
  - Retrieve the user's completed games
  - Retrieve the user's own waiting game (i.e., the game, if it exists, created by the user that awaits a second player)
+ - Determine whether the user is a player in a given game
 
 #### Validations
 

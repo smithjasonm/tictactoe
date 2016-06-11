@@ -6,7 +6,11 @@ class GameChannel < ApplicationCable::Channel
   # On channel subscription, stream updates for specified game.
   def subscribed
     @game = Game.find(params[:id])
-    stream_for @game
+    if current_user.is_player_in? @game
+      stream_for @game
+    else
+      reject
+    end
   end
   
   # Make a play.

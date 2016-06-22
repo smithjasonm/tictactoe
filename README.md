@@ -1,6 +1,8 @@
 # Overview
 
-Tic-Tac-Toe is a web application built with [Ruby on Rails](http://rubyonrails.org/) 5. It is intended for purposes of demonstration and can be [viewed on Heroku.](https://tictactoe-rails-demo.herokuapp.com/) This document describes the salient technologies on which the application relies, its use, and its basic architecture.
+Tic-Tac-Toe is a web application built with [Ruby on Rails](http://rubyonrails.org/) 5. It is intended for purposes of demonstration and can be [found on Heroku.](https://tictactoe-rails-demo.herokuapp.com/)* This document describes the salient technologies on which the application relies, its use, and its basic architecture.
+
+\*To try the application, simulate the presence of two users by creating two user accounts—the email addresses need not be legitimate—and then signing into the accounts with different web browsers.
 
 # Technologies
 

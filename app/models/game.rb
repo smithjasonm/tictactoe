@@ -80,33 +80,12 @@ class Game < ApplicationRecord
   
   # Register forfeit by player 1.
   def player1_forfeits
-    with_lock do
-      unless status == PENDING || status == P1_FORFEIT
-        raise IncompatibleGameStatusError,
-              "Status must be PENDING or P1_FORFEIT; status is #{status}"
-      end
-      
-      self.status = P1_FORFEIT
-      save!
-    end
-    
-    self
+    player_forfeits 1
   end
   
   # Register forfeit by player 2.
-  # TODO: Refactor
   def player2_forfeits
-    with_lock do
-      unless status == PENDING || status == P2_FORFEIT
-        raise IncompatibleGameStatusError,
-              "Status must be PENDING or P2_FORFEIT; status is #{status}"
-      end
-      
-      self.status = P2_FORFEIT
-      save!
-    end
-    
-    self
+    player_forfeits 2
   end
   
   # Register resignation (i.e., forfeit) by given user.
@@ -302,5 +281,22 @@ class Game < ApplicationRecord
       else
         return false
       end
+    end
+    
+    # Register forfeit by player 1 or player 2
+    def player_forfeits(player_number)
+      new_status = player_number == 1 ? P1_FORFEIT : P2_FORFEIT
+      
+      with_lock do
+        unless status == PENDING || status == new_status
+          raise IncompatibleGameStatusError,
+                "Status must be #{PENDING} or #{new_status}; status is #{status}"
+        end
+        
+        self.status = new_status
+        save!
+      end
+      
+      self
     end
 end
